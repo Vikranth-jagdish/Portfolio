@@ -334,7 +334,7 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
     return (
         <>
             <div
-                className="container relative w-full h-screen overflow-hidden bg-black text-white font-mono p-4"
+                className="container relative w-full h-screen overflow-hidden bg-transparent text-white font-mono p-4"
             >
                 <main
                     ref={containerRef}

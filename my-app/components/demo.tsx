@@ -44,6 +44,16 @@ const ROOT_CATEGORIES = [
         year: "->",
         image: "",
         action: "labs"
+    },
+    {
+        id: "stats",
+        artist: "STATS",
+        album: "METRICS",
+        category: "DATA",
+        label: "LIVE",
+        year: "->",
+        image: "",
+        action: "stats"
     }
 ];
 
@@ -108,8 +118,14 @@ const LABS_DATA = [
     { id: 2, artist: "PARTICLES", album: "CANVAS", category: "PHYSICS", label: "TEST", year: "2023", image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop" }
 ];
 
+const STATS_DATA = [
+    { id: 1, artist: "GITHUB", album: "COMMITS", category: "CODE", label: "ACTIVE", year: "STATS", image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=2688&auto=format&fit=crop" },
+    { id: 2, artist: "MONKEYTYPE", album: "SPEED", category: "WPM", label: "FAST", year: "STATS", image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=2574&auto=format&fit=crop" },
+    { id: 3, artist: "SPOTIFY", album: "TOP ARTISTS", category: "MUSIC", label: "VIBE", year: "STATS", image: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?q=80&w=2574&auto=format&fit=crop" }
+];
+
 export default function DemoPortfolio() {
-    const [currentView, setCurrentView] = useState("root"); // root, projects, experience, videos, labs
+    const [currentView, setCurrentView] = useState("root"); // root, projects, experience, videos, labs, stats
 
     const getActiveData = () => {
         switch (currentView) {
@@ -117,6 +133,7 @@ export default function DemoPortfolio() {
             case "experience": return EXPERIENCE_DATA;
             case "videos": return VIDEOS_DATA;
             case "labs": return LABS_DATA;
+            case "stats": return STATS_DATA;
             default: return ROOT_CATEGORIES;
         }
     };
