@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useEffect, useRef } from "react"
+import { cn } from "@/lib/utils"
 
 // GLSL utility functions
 const declarePI = `
@@ -237,223 +238,236 @@ void main() {
 
 // Shape and type enums
 export const DitheringShapes = {
-    simplex: 1,
-    warp: 2,
-    dots: 3,
-    wave: 4,
-    ripple: 5,
-    swirl: 6,
-    sphere: 7,
+  simplex: 1,
+  warp: 2,
+  dots: 3,
+  wave: 4,
+  ripple: 5,
+  swirl: 6,
+  sphere: 7,
 } as const
 
 export const DitheringTypes = {
-    random: 1,
-    "2x2": 2,
-    "4x4": 3,
-    "8x8": 4,
+  random: 1,
+  "2x2": 2,
+  "4x4": 3,
+  "8x8": 4,
 } as const
 
 export type DitheringShape = keyof typeof DitheringShapes
 export type DitheringType = keyof typeof DitheringTypes
 
 interface DitheringShaderProps {
-    width?: number
-    height?: number
-    colorBack?: string
-    colorFront?: string
-    shape?: DitheringShape
-    type?: DitheringType
-    pxSize?: number
-    speed?: number
-    className?: string
-    style?: React.CSSProperties
+  width?: number
+  height?: number
+  colorBack?: string
+  colorFront?: string
+  shape?: DitheringShape
+  type?: DitheringType
+  pxSize?: number
+  speed?: number
+  className?: string
+  style?: React.CSSProperties
 }
 
 function hexToRgba(hex: string): [number, number, number, number] {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    if (!result) return [0, 0, 0, 1]
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  if (!result) return [0, 0, 0, 1]
 
-    return [
-        Number.parseInt(result[1], 16) / 255,
-        Number.parseInt(result[2], 16) / 255,
-        Number.parseInt(result[3], 16) / 255,
-        1,
-    ]
+  return [
+    Number.parseInt(result[1], 16) / 255,
+    Number.parseInt(result[2], 16) / 255,
+    Number.parseInt(result[3], 16) / 255,
+    1,
+  ]
 }
 
 function createShader(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
-    const shader = gl.createShader(type)
-    if (!shader) return null
+  const shader = gl.createShader(type)
+  if (!shader) return null
 
-    gl.shaderSource(shader, source)
-    gl.compileShader(shader)
+  gl.shaderSource(shader, source)
+  gl.compileShader(shader)
 
-    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader))
-        gl.deleteShader(shader)
-        return null
-    }
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error("An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader))
+    gl.deleteShader(shader)
+    return null
+  }
 
-    return shader
+  return shader
 }
 
 function createProgram(
-    gl: WebGL2RenderingContext,
-    vertexShaderSource: string,
-    fragmentShaderSource: string,
+  gl: WebGL2RenderingContext,
+  vertexShaderSource: string,
+  fragmentShaderSource: string,
 ): WebGLProgram | null {
-    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
-    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource)
+  const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource)
+  const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource)
 
-    if (!vertexShader || !fragmentShader) return null
+  if (!vertexShader || !fragmentShader) return null
 
-    const program = gl.createProgram()
-    if (!program) return null
+  const program = gl.createProgram()
+  if (!program) return null
 
-    gl.attachShader(program, vertexShader)
-    gl.attachShader(program, fragmentShader)
-    gl.linkProgram(program)
+  gl.attachShader(program, vertexShader)
+  gl.attachShader(program, fragmentShader)
+  gl.linkProgram(program)
 
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-        console.error("Unable to initialize the shader program: " + gl.getProgramInfoLog(program))
-        gl.deleteProgram(program)
-        return null
-    }
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error("Unable to initialize the shader program: " + gl.getProgramInfoLog(program))
+    gl.deleteProgram(program)
+    return null
+  }
 
-    return program
+  return program
 }
 
 export function DitheringShader({
-    width = 800,
-    height = 800,
-    // Changed defaults to fit the dark theme portfolio
-    colorBack = "#000000",
-    colorFront = "#ffffff",
-    shape = "simplex",
-    type = "8x8",
-    pxSize = 4,
-    speed = 1,
-    className = "",
-    style = {},
+  width,
+  height,
+  colorBack = "#000000",
+  colorFront = "#ffffff",
+  shape = "simplex",
+  type = "8x8",
+  pxSize = 4,
+  speed = 1,
+  className = "",
+  style = {},
 }: DitheringShaderProps) {
-    const canvasRef = useRef<HTMLCanvasElement>(null)
-    const animationRef = useRef<number>(0)
-    const programRef = useRef<WebGLProgram | null>(null)
-    const glRef = useRef<WebGL2RenderingContext | null>(null)
-    const uniformLocationsRef = useRef<Record<string, WebGLUniformLocation | null>>({})
-    const startTimeRef = useRef<number>(Date.now())
+  const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const animationRef = useRef<number>(0)
+  const programRef = useRef<WebGLProgram | null>(null)
+  const glRef = useRef<WebGL2RenderingContext | null>(null)
+  const uniformLocationsRef = useRef<Record<string, WebGLUniformLocation | null>>({})
+  const startTimeRef = useRef<number>(Date.now())
 
-    useEffect(() => {
-        const canvas = canvasRef.current
-        if (!canvas) return
+  useEffect(() => {
+    const container = containerRef.current
+    const canvas = canvasRef.current
+    if (!container || !canvas) return
 
-        const gl = canvas.getContext("webgl2")
-        if (!gl) {
-            console.error("WebGL2 not supported")
-            return
-        }
+    const gl = canvas.getContext("webgl2")
+    if (!gl) {
+      console.error("WebGL2 not supported")
+      return
+    }
 
-        glRef.current = gl
+    glRef.current = gl
 
-        // Create shader program
-        const program = createProgram(gl, vertexShaderSource, fragmentShaderSource)
-        if (!program) return
+    // Create shader program
+    const program = createProgram(gl, vertexShaderSource, fragmentShaderSource)
+    if (!program) return
 
-        programRef.current = program
+    programRef.current = program
 
-        // Get uniform locations
-        uniformLocationsRef.current = {
-            u_time: gl.getUniformLocation(program, "u_time"),
-            u_resolution: gl.getUniformLocation(program, "u_resolution"),
-            u_colorBack: gl.getUniformLocation(program, "u_colorBack"),
-            u_colorFront: gl.getUniformLocation(program, "u_colorFront"),
-            u_shape: gl.getUniformLocation(program, "u_shape"),
-            u_type: gl.getUniformLocation(program, "u_type"),
-            u_pxSize: gl.getUniformLocation(program, "u_pxSize"),
-        }
+    // Get uniform locations
+    uniformLocationsRef.current = {
+      u_time: gl.getUniformLocation(program, "u_time"),
+      u_resolution: gl.getUniformLocation(program, "u_resolution"),
+      u_colorBack: gl.getUniformLocation(program, "u_colorBack"),
+      u_colorFront: gl.getUniformLocation(program, "u_colorFront"),
+      u_shape: gl.getUniformLocation(program, "u_shape"),
+      u_type: gl.getUniformLocation(program, "u_type"),
+      u_pxSize: gl.getUniformLocation(program, "u_pxSize"),
+    }
 
-        // Set up position attribute
-        const positionAttributeLocation = gl.getAttribLocation(program, "a_position")
-        const positionBuffer = gl.createBuffer()
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-        const positions = [-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
-        gl.enableVertexAttribArray(positionAttributeLocation)
-        gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0)
+    // Set up position attribute
+    const positionAttributeLocation = gl.getAttribLocation(program, "a_position")
+    const positionBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
+    const positions = [-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
+    gl.enableVertexAttribArray(positionAttributeLocation)
+    gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0)
 
-        // Set canvas size
-        // Explicitly set canvas width/height attributes for WebGL resolution
-        // Using simple approach first
-        canvas.width = width
-        canvas.height = height
-        gl.viewport(0, 0, width, height)
+    // Handle Resize
+    const handleResize = () => {
+      const w = width ?? container.clientWidth;
+      const h = height ?? container.clientHeight;
+      canvas.width = w;
+      canvas.height = h;
+      gl.viewport(0, 0, w, h);
+    };
 
-        // Animation loop
-        const render = () => {
-            const currentTime = (Date.now() - startTimeRef.current) * 0.001 * speed
+    const resizeObserver = new ResizeObserver(() => handleResize());
+    resizeObserver.observe(container);
+    handleResize(); // Initial size
 
-            const context = glRef.current
-            const shaderProgram = programRef.current
+    // Animation loop
+    const render = () => {
+      const currentTime = (Date.now() - startTimeRef.current) * 0.001 * speed
 
-            if (!context || !shaderProgram) return
+      const context = glRef.current
+      const shaderProgram = programRef.current
 
-            context.clear(context.COLOR_BUFFER_BIT)
-            context["useProgram"](shaderProgram)
+      if (!context || !shaderProgram) return
 
-            // Set uniforms
-            const locations = uniformLocationsRef.current
+      // Use current canvas dimensions for resolution uniform
+      const w = canvas.width;
+      const h = canvas.height;
 
-            if (locations.u_time) context.uniform1f(locations.u_time, currentTime)
-            if (locations.u_resolution) context.uniform2f(locations.u_resolution, width, height)
-            if (locations.u_colorBack) context.uniform4fv(locations.u_colorBack, hexToRgba(colorBack))
-            if (locations.u_colorFront) context.uniform4fv(locations.u_colorFront, hexToRgba(colorFront))
-            if (locations.u_shape) context.uniform1f(locations.u_shape, DitheringShapes[shape])
-            if (locations.u_type) context.uniform1f(locations.u_type, DitheringTypes[type])
-            if (locations.u_pxSize) context.uniform1f(locations.u_pxSize, pxSize)
+      context.clear(context.COLOR_BUFFER_BIT)
+      context["useProgram"](shaderProgram)
 
-            context.drawArrays(context.TRIANGLES, 0, 6)
+      // Set uniforms
+      const locations = uniformLocationsRef.current
 
-            if (speed !== 0) {
-                animationRef.current = requestAnimationFrame(render)
-            }
-        }
+      if (locations.u_time) context.uniform1f(locations.u_time, currentTime)
+      if (locations.u_resolution) context.uniform2f(locations.u_resolution, w, h)
+      if (locations.u_colorBack) context.uniform4fv(locations.u_colorBack, hexToRgba(colorBack))
+      if (locations.u_colorFront) context.uniform4fv(locations.u_colorFront, hexToRgba(colorFront))
+      if (locations.u_shape) context.uniform1f(locations.u_shape, DitheringShapes[shape])
+      if (locations.u_type) context.uniform1f(locations.u_type, DitheringTypes[type])
+      if (locations.u_pxSize) context.uniform1f(locations.u_pxSize, pxSize)
 
-        const startAnimation = () => {
-            if (speed !== 0) {
-                animationRef.current = requestAnimationFrame(render)
-            }
-        }
+      context.drawArrays(context.TRIANGLES, 0, 6)
 
-        startAnimation()
+      if (speed !== 0) {
+        animationRef.current = requestAnimationFrame(render)
+      }
+    }
 
-        return () => {
-            if (animationRef.current) {
-                cancelAnimationFrame(animationRef.current)
-            }
-            if (glRef.current && programRef.current) {
-                glRef.current.deleteProgram(programRef.current)
-            }
-        }
-    }, [width, height, colorBack, colorFront, shape, type, pxSize, speed])
+    const startAnimation = () => {
+      if (speed !== 0) {
+        animationRef.current = requestAnimationFrame(render)
+      }
+    }
 
-    return (
-        <div
-            className={className}
-            style={{
-                position: "relative",
-                width,
-                height,
-                ...style,
-            }}
-        >
-            <canvas
-                ref={canvasRef}
-                style={{
-                    display: "block",
-                    width: "100%",
-                    height: "100%",
-                }}
-            />
-        </div>
-    )
+    startAnimation()
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+      if (glRef.current && programRef.current) {
+        glRef.current.deleteProgram(programRef.current)
+      }
+      resizeObserver.disconnect();
+    }
+  }, [width, height, colorBack, colorFront, shape, type, pxSize, speed])
+
+  return (
+    <div
+      ref={containerRef}
+      className={cn("w-full h-full", className)}
+      style={{
+        position: "relative",
+        width: width ? width : "100%",
+        height: height ? height : "100%",
+        ...style,
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          display: "block",
+          width: "100%",
+          height: "100%",
+        }}
+      />
+    </div>
+  )
 }

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Space_Mono } from "next/font/google";
 import "./globals.css";
 
+import { DitheringShader } from "@/components/ui/dithering-shader";
+
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
   subsets: ["latin"],
@@ -25,6 +27,17 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${spaceMono.variable} antialiased bg-black text-white`}
       >
+        <div className="fixed inset-0 pointer-events-none -z-10 opacity-40">
+          <DitheringShader
+            shape="swirl"
+            type="4x4"
+            colorBack="#050505"
+            colorFront="#4a4200"
+            pxSize={4}
+            speed={0.2}
+            className="w-full h-full"
+          />
+        </div>
         {children}
       </body>
     </html>
