@@ -396,6 +396,11 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                                 <a href={SOCIAL_LINKS.email} className="hover:underline">Email</a> |
                             </>
                         )}
+                        {SOCIAL_LINKS.instagram && (
+                            <>
+                                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a> |
+                            </>
+                        )}
                         {SOCIAL_LINKS.x && (
                             <a href={SOCIAL_LINKS.x} target="_blank" rel="noopener noreferrer" className="hover:underline">X</a>
                         )}
