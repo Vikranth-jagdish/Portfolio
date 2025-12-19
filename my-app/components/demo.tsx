@@ -32,6 +32,7 @@ export default function DemoPortfolio() {
             SOCIAL_LINKS={GLOBAL_SOCIAL_LINKS}
             LOCATION={GLOBAL_LOCATION}
             CALLBACKS={callbacks}
+            hideHoverBackground={true}
         />
     );
 }

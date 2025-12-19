@@ -216,7 +216,15 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
 };
 
 // Main Portfolio Component
-const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CONFIG = {}, SOCIAL_LINKS = {}, CustomBackground }: any) => {
+const MusicPortfolio = ({
+    PROJECTS_DATA = [],
+    LOCATION = {},
+    CALLBACKS = {},
+    CONFIG = {},
+    SOCIAL_LINKS = {},
+    CustomBackground,
+    hideHoverBackground = false
+}: any) => {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [expandedIndex, setExpandedIndex] = useState(-1);
     const [isIdle, setIsIdle] = useState(true);
@@ -296,8 +304,8 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
 
         // STRICT BACKGROUND SUPPRESSION
         // If an item is expanded, or a video is active, or we have a custom spiral background, 
-        // we should NEVER show the hover-based background images.
-        if (expandedIndex !== -1 || activeVideo || project?.videoSrc || CustomBackground || !imageUrl || !backgroundRef.current) {
+        // or hideHoverBackground is true, we should NEVER show the hover-based background images.
+        if (hideHoverBackground || expandedIndex !== -1 || activeVideo || project?.videoSrc || CustomBackground || !imageUrl || !backgroundRef.current) {
             if (backgroundRef.current) {
                 backgroundRef.current.style.opacity = "0";
                 backgroundRef.current.style.backgroundImage = "none";

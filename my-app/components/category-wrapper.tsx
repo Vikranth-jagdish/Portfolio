@@ -84,6 +84,7 @@ export default function CategoryPageWrapper({ category }: CategoryPageProps) {
             LOCATION={GLOBAL_LOCATION}
             CALLBACKS={callbacks}
             CustomBackground={CustomBackground}
+            hideHoverBackground={true}
         />
     );
 }

@@ -67,7 +67,7 @@ export const PROJECTS_DATA_DETAILED = [
         category: "NEXT.JS",
         label: "LIVE",
         year: "2025",
-        image: "https://images.unsplash.com/photo-1576091160550-217359f4ebf4?q=80&w=2670&auto=format&fit=crop",
+        image: "",
         link: "https://healthpilot.ai",
         techLogos: [
             "https://cdn.worldvectorlogo.com/logos/next-js.svg",
@@ -75,7 +75,7 @@ export const PROJECTS_DATA_DETAILED = [
             "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
             "https://cdn.worldvectorlogo.com/logos/supabase.svg"
         ],
-        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase.\n\nTech Stack Overview:\n⚛️ Next.js (App Router) for high-performance frontend architecture.\n📘 TypeScript for robust, type-safe development.\n🎨 Tailwind CSS for a sleek, medical-grade UI.\n🛡️ Clerk Authentication for secure physician portals.\n🗄️ Supabase (PostgreSQL) for scalable backend infrastructure."
+        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase."
     },
     {
         id: 2,
@@ -84,7 +84,7 @@ export const PROJECTS_DATA_DETAILED = [
         category: "AGENTIC AI",
         label: "R&D",
         year: "2024",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
+        image: "",
         techLogos: [
             "https://cdn.worldvectorlogo.com/logos/python-5.svg",
             "https://cdn.worldvectorlogo.com/logos/fastapi-1.svg",
@@ -92,7 +92,7 @@ export const PROJECTS_DATA_DETAILED = [
             "https://cdn.worldvectorlogo.com/logos/postgresql.svg",
             "https://cdn.worldvectorlogo.com/logos/openai-2.svg"
         ],
-        description: "Medical Knowledge Graph RAG - Clinical Decision Support System. An advanced AI-powered clinical system that combines traditional RAG with knowledge graph capabilities to provide evidence-based differential diagnosis and treatment planning based on ICMR guidelines.\n\nSystem Capabilities:\n- Document Ingestion Pipeline: Processes ICMR medical guidelines with semantic chunking and medical entity extraction.\n- Knowledge Graph Architecture: Built using Neo4j and Graphiti to map temporal connections between conditions, medications, and protocols.\n- AI Clinical Agent: A Pydantic AI-powered conversational agent capable of cross-referencing vector databases and knowledge graphs.\n\nTech Stack:\n🐍 Python 3.11+\n🤖 Pydantic AI (Agent Framework)\n⚙️ FastAPI (Streaming API)\n🔗 Neo4j & Graphiti (Temporal Knowledge Graph)\n🐘 PostgreSQL & PGVector (Vector Database)\n⚡ GPT-4 / Gemini / Ollama"
+        description: "Medical Knowledge Graph RAG - Clinical Decision Support System. An advanced AI-powered clinical system that combines traditional RAG with knowledge graph capabilities to provide evidence-based differential diagnosis and treatment planning based on ICMR guidelines.\n\nSystem Capabilities:\n- Clinical Reasoning: A Pydantic AI-powered agent interface that cross-references both vector databases (PostgreSQL) and knowledge graphs (Neo4j) to generate structured differential diagnoses and treatment plans.\n- Medical Entity Extraction: Specialized pipeline that identifies 200+ conditions, 150+ medications, and 250+ clinical tests from unstructured medical text.\n- Knowledge Graph Construction: Built using Graphiti for temporal tracking, mapping the relationships between conditions and their evidence-based interventions.\n- Document Ingestion: Processes complex ICMR guidelines using semantic chunking to preserve clinical context."
     },
     {
         id: 3,
@@ -101,14 +101,14 @@ export const PROJECTS_DATA_DETAILED = [
         category: "REACT",
         label: "STUDY",
         year: "2024",
-        image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=2564&auto=format&fit=crop",
+        image: "",
         techLogos: [
             "https://cdn.worldvectorlogo.com/logos/react-2.svg",
             "https://cdn.worldvectorlogo.com/logos/typescript.svg",
             "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
             "https://cdn.worldvectorlogo.com/logos/framer-motion.svg"
         ],
-        description: "A high-fidelity clone of the Codechef competitive programming platform. This project serves as a deep dive into complex UI components and high-performance real-time data handling.\n\nFeatures:\n- Real-time Leaderboards: Synchronized competitive programming rankings.\n- Problem Editor: A sophisticated code editor environment for practice.\n- Responsive Architecture: Optimized for all devices to ensure a seamless coding experience.\n\nTech Stack:\n⚛️ React.js (Component Architecture)\n📘 TypeScript (Type Safety)\n💨 Tailwind CSS (Styling)\n⚡ Framer Motion (Micro-interactions)\n🧩 Custom UI Library tailored for high-density information display."
+        description: "A high-fidelity clone of the Codechef competitive programming platform. This project serves as a deep dive into complex UI components and high-performance real-time data handling.\n\nFeatures:\n- Real-time Leaderboards: Synchronized competitive programming rankings.\n- Problem Editor: A sophisticated code editor environment for practice.\n- Responsive Architecture: Optimized for all devices to ensure a seamless coding experience."
     },
     {
         id: 4,
@@ -117,14 +117,14 @@ export const PROJECTS_DATA_DETAILED = [
         category: "HEALTHCARE",
         label: "NEW",
         year: "2024",
-        image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=2670&auto=format&fit=crop",
+        image: "",
         techLogos: [
             "https://cdn.worldvectorlogo.com/logos/python-5.svg",
             "https://cdn.worldvectorlogo.com/logos/openai-2.svg",
             "https://cdn.worldvectorlogo.com/logos/fastapi-1.svg",
             "https://cdn.worldvectorlogo.com/logos/livekit.svg"
         ],
-        description: "A voice-activated AI agent built with LiveKit that interactively asks patients questions during website visits and securely relays answers to healthcare providers. It streamlines the intake process and optimizes physician time.\n\nKey Components:\n- Real-time Voice Streaming: Low-latency communication using LiveKit Cloud.\n- AI Patient Assessment: Natural language understanding using GPT-4.\n- Healthcare Provider Dashboard: Securely relayed data for immediate physician review.\n\nTech Stack:\n🐍 Python (Backend Logic)\n🎙️ LiveKit AI (Voice Streaming & WebRTC)\n🤖 OpenAI GPT-4 / Gemini (Conversation Engine)\n⚙️ FastAPI (Asynchronous Data Handling)\n🐳 Docker (Deployment Strategy)"
+        description: "A voice-activated AI agent built with LiveKit that interactively asks patients questions during website visits and securely relays answers to healthcare providers. It streamlines the intake process and optimizes physician time.\n\nKey Components:\n- Real-time Voice Streaming: Low-latency communication using LiveKit Cloud powered by WebRTC.\n- AI Patient Assessment: Natural language understanding using GPT-4 to handle complex symptom reporting.\n- Healthcare Provider Dashboard: Securely relayed data for immediate physician review."
     }
 ];
 
