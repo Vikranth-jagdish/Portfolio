@@ -24,7 +24,7 @@ export default function CategoryPageWrapper({ category }: CategoryPageProps) {
     const router = useRouter();
 
     let data: any[] = [];
-    let CustomBackground = null;
+    let CustomBackground = <DitheringShader />;
 
     switch (category) {
         case "projects":

@@ -212,8 +212,10 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
 const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CONFIG = {}, SOCIAL_LINKS = {}, CustomBackground }: any) => {
     const [activeIndex, setActiveIndex] = useState(-1);
     const [isIdle, setIsIdle] = useState(true);
+    const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
     const backgroundRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const containerRef = useRef(null);
     const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
     const idleAnimationRef = useRef<any>(null);
@@ -231,66 +233,40 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
         });
     }, [PROJECTS_DATA]);
 
-    // Start idle animation
-    const startIdleAnimation = useCallback(() => {
-        if (idleAnimationRef.current) return;
-
-        const timeline = gsap.timeline({
-            repeat: -1,
-            repeatDelay: 2
-        });
-
-        projectItemsRef.current.forEach((item, index) => {
-            if (!item) return;
-
-            const hideTime = 0 + index * 0.05;
-            const showTime = 0 + (PROJECTS_DATA.length * 0.05 * 0.5) + index * 0.05;
-
-            timeline.to(item, {
-                opacity: 0.05,
-                duration: 0.1,
-                ease: "power2.inOut"
-            }, hideTime);
-
-            timeline.to(item, {
-                opacity: 1,
-                duration: 0.1,
-                ease: "power2.inOut"
-            }, showTime);
-        });
-
-        idleAnimationRef.current = timeline;
-    }, [PROJECTS_DATA.length]);
-
-    // Stop idle animation
+    // Handle idle animation and timers
     const stopIdleAnimation = useCallback(() => {
         if (idleAnimationRef.current) {
             idleAnimationRef.current.kill();
             idleAnimationRef.current = null;
-
             projectItemsRef.current.forEach(item => {
-                if (item) {
-                    gsap.set(item, { opacity: 1 });
-                }
+                if (item) gsap.set(item, { opacity: 1 });
             });
         }
     }, []);
 
-    // Start idle timer
-    const startIdleTimer = useCallback(() => {
-        if (idleTimerRef.current) {
-            clearTimeout(idleTimerRef.current);
-        }
+    const startIdleAnimation = useCallback(() => {
+        if (idleAnimationRef.current || activeVideo) return;
+        const timeline = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+        projectItemsRef.current.forEach((item, index) => {
+            if (!item) return;
+            const hideTime = index * 0.05;
+            const showTime = (PROJECTS_DATA.length * 0.025) + index * 0.05;
+            timeline.to(item, { opacity: 0.05, duration: 0.1 }, hideTime);
+            timeline.to(item, { opacity: 1, duration: 0.1 }, showTime);
+        });
+        idleAnimationRef.current = timeline;
+    }, [PROJECTS_DATA.length, activeVideo]);
 
+    const startIdleTimer = useCallback(() => {
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
         idleTimerRef.current = setTimeout(() => {
-            if (activeIndex === -1) {
+            if (activeIndex === -1 && !activeVideo) {
                 setIsIdle(true);
                 startIdleAnimation();
             }
         }, CONFIG.idleDelay || 4000);
-    }, [activeIndex, startIdleAnimation, CONFIG.idleDelay]);
+    }, [activeIndex, activeVideo, startIdleAnimation, CONFIG.idleDelay]);
 
-    // Stop idle timer
     const stopIdleTimer = useCallback(() => {
         if (idleTimerRef.current) {
             clearTimeout(idleTimerRef.current);
@@ -298,86 +274,75 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
         }
     }, []);
 
-    // Handle mouse enter on project
+    // Handle mouse events
     const handleProjectMouseEnter = useCallback((index: number, imageUrl: string) => {
-        if (debounceRef.current) {
-            clearTimeout(debounceRef.current);
-        }
-
+        if (debounceRef.current) clearTimeout(debounceRef.current);
         stopIdleAnimation();
         stopIdleTimer();
         setIsIdle(false);
-
         if (activeIndex === index) return;
-
         setActiveIndex(index);
-        if (CALLBACKS.onProjectHover) {
-            CALLBACKS.onProjectHover(PROJECTS_DATA[index]);
-        }
 
-        if (imageUrl && backgroundRef.current) {
-            // Show background with animation
+        if (imageUrl && backgroundRef.current && !activeVideo) {
             const bg = backgroundRef.current;
             bg.style.transition = "none";
-            bg.style.transform = "translate(-50%, -50%) scale(1.2)";
             bg.style.backgroundImage = `url(${imageUrl})`;
             bg.style.opacity = "1";
-
+            bg.style.transform = "translate(-50%, -50%) scale(1.1)";
             requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    bg.style.transition = "opacity 0.6s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-                    bg.style.transform = "translate(-50%, -50%) scale(1.0)";
-                });
+                bg.style.transition = "opacity 0.6s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+                bg.style.transform = "translate(-50%, -50%) scale(1.0)";
             });
         }
-    }, [activeIndex, stopIdleAnimation, stopIdleTimer, CALLBACKS, PROJECTS_DATA]);
+    }, [activeIndex, activeVideo, stopIdleAnimation, stopIdleTimer]);
 
-    // Handle mouse leave on project
     const handleProjectMouseLeave = useCallback(() => {
-        debounceRef.current = setTimeout(() => {
-            // Text reset handled in ProjectItem component
-        }, 50);
+        debounceRef.current = setTimeout(() => { }, 50);
     }, []);
 
-    // Handle container mouse leave
     const handleContainerMouseLeave = useCallback(() => {
-        if (debounceRef.current) {
-            clearTimeout(debounceRef.current);
-        }
-
+        if (debounceRef.current) clearTimeout(debounceRef.current);
         setActiveIndex(-1);
+        if (backgroundRef.current) backgroundRef.current.style.opacity = "0";
+        if (!activeVideo) startIdleTimer();
+    }, [startIdleTimer, activeVideo]);
 
-        if (backgroundRef.current) {
-            backgroundRef.current.style.opacity = "0";
-        }
-
-        startIdleTimer();
-    }, [startIdleTimer]);
-
-    // Initial idle animation
     useEffect(() => {
-        startIdleTimer();
+        if (!activeVideo) startIdleTimer();
         return () => {
             stopIdleTimer();
             stopIdleAnimation();
         };
-    }, [startIdleTimer, stopIdleTimer, stopIdleAnimation]);
+    }, [startIdleTimer, stopIdleTimer, stopIdleAnimation, activeVideo]);
 
-    // Handle click to navigate if project has action
     const handleProjectClick = (project: any) => {
-        if (CALLBACKS.onProjectClick) {
+        if (project.videoSrc) {
+            setActiveVideo(project.videoSrc);
+            setActiveIndex(-1);
+            stopIdleAnimation();
+            stopIdleTimer();
+            if (backgroundRef.current) backgroundRef.current.style.opacity = "0";
+        } else if (CALLBACKS.onProjectClick) {
             CALLBACKS.onProjectClick(project);
         }
     };
 
     return (
         <>
-            <div
-                className="container relative w-full h-screen overflow-hidden bg-transparent text-white font-mono p-4"
-            >
+            <div className="container relative w-full h-screen overflow-hidden bg-transparent text-white font-mono p-4">
+                {/* Close Video button */}
+                {activeVideo && (
+                    <button
+                        onClick={() => setActiveVideo(null)}
+                        className="fixed top-24 left-1/2 -translate-x-1/2 z-[60] px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-[10px] uppercase tracking-widest font-bold backdrop-blur-md transition-all animate-fade-in"
+                    >
+                        [ CLOSE VIDEO ]
+                    </button>
+                )}
+
                 <main
                     ref={containerRef}
-                    className={`portfolio-container relative z-10 w-full max-w-6xl mx-auto top-1/2 transform -translate-y-1/2 ${activeIndex !== -1 ? 'has-active' : ''}`}
+                    className={`portfolio-container relative z-40 w-full max-w-6xl mx-auto top-1/2 transform -translate-y-1/2 transition-all duration-700 ${activeIndex !== -1 || activeVideo ? 'has-active' : ''} ${activeVideo ? 'opacity-20 pointer-events-none scale-95 blur-sm' : 'opacity-100'}`}
                     onMouseLeave={handleContainerMouseLeave}
                 >
                     <h1 className="sr-only">Vikranth Jagdish Portfolio</h1>
@@ -398,14 +363,24 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                     </ul>
                 </main>
 
+                {/* Video Background Layer */}
+                <div className={`fixed inset-0 z-0 bg-black transition-opacity duration-1000 ${activeVideo ? 'opacity-100 shadow-[inset_0_0_200px_rgba(0,0,0,1)]' : 'opacity-0 pointer-events-none'}`}>
+                    {activeVideo && (
+                        <video
+                            ref={videoRef}
+                            src={activeVideo}
+                            autoPlay
+                            loop
+                            className="w-full h-full object-cover mix-blend-screen opacity-60"
+                            onMouseEnter={(e: any) => e.target.play()}
+                        />
+                    )}
+                </div>
+
                 {/* Custom Background Layer (Dithering Shader) */}
-                {CustomBackground && (
-                    <div
-                        className={`fixed inset-0 pointer-events-none -z-10 transition-opacity duration-700 ${activeIndex === -1 ? 'opacity-100' : 'opacity-0'}`}
-                    >
-                        {CustomBackground}
-                    </div>
-                )}
+                <div className={`fixed inset-0 pointer-events-none -z-10 transition-opacity duration-700 ${activeIndex === -1 && !activeVideo ? 'opacity-100' : 'opacity-0'}`}>
+                    {CustomBackground}
+                </div>
 
                 <div
                     ref={backgroundRef}
@@ -418,27 +393,18 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
 
                 <aside className="corner-elements fixed inset-0 pointer-events-none p-6">
                     <div className="corner-item top-left fixed top-4 left-4 z-50">
-                        {/* If we have a Back callback or if we are deep, show back? 
-                            For now, stick to static corner elements for simplicity unless requested.
-                        */}
                         <div className="corner-square w-3 h-3 bg-[var(--color-accent)]" aria-hidden="true"></div>
                         <p className="mt-2 text-xs text-[var(--color-accent)] font-bold">VIKRANTH JAGDISH</p>
                     </div>
                     <nav className="corner-item top-right fixed top-4 right-4 z-50 pointer-events-auto text-xs flex gap-3 text-[var(--color-accent)] uppercase">
                         {SOCIAL_LINKS.linkedin && (
-                            <>
-                                <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn</a> |
-                            </>
+                            <><a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" className="hover:underline">LinkedIn</a> |</>
                         )}
                         {SOCIAL_LINKS.email && (
-                            <>
-                                <a href={SOCIAL_LINKS.email} className="hover:underline">Email</a> |
-                            </>
+                            <><a href={SOCIAL_LINKS.email} className="hover:underline">Email</a> |</>
                         )}
                         {SOCIAL_LINKS.instagram && (
-                            <>
-                                <a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a> |
-                            </>
+                            <><a href={SOCIAL_LINKS.instagram} target="_blank" rel="noopener noreferrer" className="hover:underline">Instagram</a> |</>
                         )}
                         {SOCIAL_LINKS.x && (
                             <a href={SOCIAL_LINKS.x} target="_blank" rel="noopener noreferrer" className="hover:underline">X</a>
