@@ -8,10 +8,10 @@ export function GlobalSpotifyCard() {
         <motion.div
             drag
             dragMomentum={false}
-            whileHover={{ scale: 0.8 }}
-            whileTap={{ scale: 0.75, cursor: "grabbing" }}
-            initial={{ scale: 0.75 }}
-            className="fixed top-20 right-5 z-[100] cursor-grab hidden lg:block select-none"
+            whileHover={{ scale: 0.65 }}
+            whileTap={{ scale: 0.55, cursor: "grabbing" }}
+            initial={{ scale: 0.6 }}
+            className="fixed top-24 right-5 z-[100] cursor-grab hidden lg:block select-none"
             style={{
                 touchAction: "none",
                 transformOrigin: "top right"
