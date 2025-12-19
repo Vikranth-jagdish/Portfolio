@@ -136,7 +136,7 @@ export const GLOBAL_CONFIG = {
 export const GLOBAL_SOCIAL_LINKS = {
     linkedin: "https://www.linkedin.com/in/vikranth-jagdish-b37798126/",
     instagram: "https://www.instagram.com/vikranth_jagdish/",
-    email: "mailto:contact@vikranth.dev",
+    email: "mailto:vicky@botcode.com",
     x: "https://x.com/vikranth_j"
 };
 

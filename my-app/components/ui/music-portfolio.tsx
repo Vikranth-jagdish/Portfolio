@@ -98,45 +98,84 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
         year: useRef<HTMLElement>(null),
     };
 
+    // Custom Scramble Animation Fallback
+    const scramble = (ref: HTMLElement, targetText: string) => {
+        const chars = "!<>-_\\/[]{}—=+*^?#________";
+        let iteration = 0;
+        const speed = 2; // Iterations per frame
+        const duration = 15; // Total iterations
+
+        const interval = setInterval(() => {
+            ref.innerText = targetText
+                .split("")
+                .map((char, index) => {
+                    if (index < iteration / speed) {
+                        return targetText[index];
+                    }
+                    return chars[Math.floor(Math.random() * chars.length)];
+                })
+                .join("");
+
+            if (iteration >= targetText.length * speed) {
+                clearInterval(interval);
+                ref.innerText = targetText;
+            }
+
+            iteration++;
+        }, 30);
+
+        return interval;
+    };
+
+    // Custom Sound Effect
+    const playHoverSound = () => {
+        try {
+            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+            if (!AudioContext) return;
+
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+
+            osc.type = 'sine'; // High tech chirp
+            osc.frequency.setValueAtTime(1200, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+
+            gain.gain.setValueAtTime(0.05, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+        } catch (e) {
+            // Audio context might be blocked or unavailable
+        }
+    };
+
     useEffect(() => {
+        const intervals: any[] = [];
         if (isActive) {
-            // Animate text scramble on hover
+            playHoverSound();
             Object.entries(textRefs).forEach(([key, ref]) => {
                 if (ref.current) {
-                    gsap.killTweensOf(ref.current);
-
-                    // Fallback if ScrambleText not present: simple text set or custom randomChars
-                    // Since we can't easily rely on the plugin being present in the free package.
-                    try {
-                        // @ts-ignore
-                        if (gsap.plugins?.ScrambleTextPlugin) {
-                            gsap.to(ref.current, {
-                                duration: 0.8,
-                                scrambleText: {
-                                    text: project[key],
-                                    chars: "qwerty1337h@ck3r",
-                                    revealDelay: 0.3,
-                                    speed: 0.4
-                                }
-                            });
-                        } else {
-                            // Simple fallback animation
-                            ref.current.textContent = project[key]; // Immediate for now
-                        }
-                    } catch (e) {
-                        ref.current.textContent = project[key];
-                    }
+                    const originalText = project[key];
+                    const interval = scramble(ref.current, originalText);
+                    intervals.push(interval);
                 }
             });
         } else {
-            // Reset text
             Object.entries(textRefs).forEach(([key, ref]) => {
                 if (ref.current) {
-                    gsap.killTweensOf(ref.current);
                     ref.current.textContent = project[key];
                 }
             });
         }
+
+        return () => {
+            intervals.forEach(clearInterval);
+        };
     }, [isActive, project]);
 
     return (
