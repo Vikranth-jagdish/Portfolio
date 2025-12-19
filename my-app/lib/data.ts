@@ -92,21 +92,58 @@ export const PROJECTS_DATA_DETAILED = [
 export const EXPERIENCE_DATA = [
     {
         id: 1,
-        artist: "SENIOR DEV",
-        album: "TECH CORP",
-        category: "FULLTIME",
-        label: "US",
-        year: "2022-24",
-        image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2670&auto=format&fit=crop"
+        artist: "SOFTWARE ENGINEER",
+        album: "HEALTHPILOT.AI",
+        category: "FULL-TIME",
+        label: "REMOTE",
+        year: "2025-PRES",
+        description: "Building HealthPilot—an AI-native platform for obesity physicians to track patients and personalize weight-loss journeys. Specialized in SNOMED and FHIR healthcare standards.",
+        image: "https://images.unsplash.com/photo-1576091160550-217359f4ebf4?q=80&w=2670&auto=format&fit=crop",
+        link: "https://healthpilot.ai"
     },
     {
         id: 2,
-        artist: "WEB LEAD",
-        album: "STARTUP INC",
-        category: "CONTRACT",
+        artist: "AI SOFTWARE DEV",
+        album: "BOTCODE TECHNOLOGIES",
+        category: "FULL-TIME",
+        label: "ON-SITE",
+        year: "2025-PRES",
+        description: "Developing autonomous, agentic AI tools for advanced healthcare systems using FastAPI and DevOps practices.",
+        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2670&auto=format&fit=crop",
+        link: "https://botcode.com"
+    },
+    {
+        id: 3,
+        artist: "VICE PRESIDENT",
+        album: "DAO COMMUNITY VIT",
+        category: "LEADERSHIP",
+        label: "VITC",
+        year: "2023-PRES",
+        description: "Overseeing department operations and strategy as Vice President. Previously led Web Development and Content divisions, scaling the community's digital presence.",
+        image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2574&auto=format&fit=crop",
+        link: "https://daocommunity.in"
+    },
+    {
+        id: 4,
+        artist: "STRATEGY LEAD",
+        album: "V-NEST",
+        category: "STARTUP INC",
+        label: "VITC",
+        year: "2025-PRES",
+        description: "Leading Strategy and Brand Management for VIT Chennai's startup incubator, supporting early-stage ventures.",
+        image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=2670&auto=format&fit=crop",
+        link: "https://vnest.org"
+    },
+    {
+        id: 5,
+        artist: "AI DEVELOPER",
+        album: "THINKROOT",
+        category: "INTERNSHIP",
         label: "REMOTE",
-        year: "2021-22",
-        image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2669&auto=format&fit=crop"
+        year: "2025",
+        description: "Designed and built an agentic AI astrology engine for personalized predictions, integrating Telegram and WhatsApp APIs.",
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
+        link: "https://thinkroot.in"
     }
 ];
 
