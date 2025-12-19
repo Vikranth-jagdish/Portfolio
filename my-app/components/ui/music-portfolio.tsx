@@ -5,38 +5,6 @@ import { gsap } from 'gsap';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
 
 // Register GSAP plugin
-// Note: ScrambleTextPlugin is a premium GSAP plugin. 
-// If the user doesn't have the premium license, this might fail or fallback. 
-// Standard GSAP doesn't include it by default in the free repo sometimes, 
-// but it is installable via npm if they have a token, or it might be the trial version.
-// However, commonly 'gsap' npm package doesn't have ScrambleTextPlugin. 
-// It usually requires 'gsap-trial' or a private registry.
-// I will check if I can just use it or if I need to comment it out / provide simple fallback if it fails.
-// For now I will assume the user has it or I need to use a text scramble alternative if it breaks.
-// Actually, I'll check if 'gsap/ScrambleTextPlugin' resolves.
-// If not, I might need to implement a simple JS scrambler or use a free alternative.
-// I'll try to import it. If it fails, I'll catch it or the user will see an error.
-// Safe fallback: Since I cannot guarantee they have the paid plugin, I might replace it with a simple custom implementation if needed.
-// But the user GAVE me the code using it. I should stick to it.
-// Wait, is ScrambleTextPlugin free? No, it's Club GSAP.
-// Maybe I should use a free alternative or Mock it if it's not available to avoid build errors?
-// Or maybe I should check if it's in the `gsap` package.
-// `gsap` package usually only has core and free plugins. ScrambleText is NOT free.
-// I will rewrite the scrambling logic using a custom hook or function to ensure it works without a paid license, 
-// UNLESS I can verify they have it. 
-// ACTUALLY, I will try to use it, but if I get an error, I will know.
-// Better yet, I will write the code as requested but arguably I should warn the user.
-// "gsap": "^3.12.5" is what likely installed.
-// I will verify if ScrambleTextPlugin is available in `node_modules/gsap`.
-// If not, I will implement a lightweight manual scrambler to ensure the "beautiful portfolio" works.
-
-// Let's modify the import to be safe? 
-// The user explicitly provided the code with that import. I should probably leave it and warn, 
-// or if I see it failing, fix it.
-// However, since I am "making it work", and I know ScrambleText is paid, I should probably substitute it with a manual effect for the 'hover' scrambled text 
-// so the user doesn't get a "Module not found" error.
-// I'll verify file existence first.
-
 try {
     gsap.registerPlugin(ScrambleTextPlugin);
 } catch (e) {
@@ -50,7 +18,6 @@ const TimeDisplay = ({ CONFIG = {} }: any) => {
     useEffect(() => {
         const updateTime = () => {
             const now = new Date();
-            // Safe helper for timezone
             let options: Intl.DateTimeFormatOptions = {
                 hour12: true,
                 hour: "numeric",
@@ -103,9 +70,9 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
         const chars = "!<>-_\\/[]{}—=+*^?#________";
         let iteration = 0;
         const speed = 2; // Iterations per frame
-        const duration = 15; // Total iterations
 
         const interval = setInterval(() => {
+            if (!ref) return;
             ref.innerText = targetText
                 .split("")
                 .map((char, index) => {
@@ -137,7 +104,7 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
 
-            osc.type = 'sine'; // High tech chirp
+            osc.type = 'sine';
             osc.frequency.setValueAtTime(1200, ctx.currentTime);
             osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
 
@@ -149,9 +116,7 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
 
             osc.start();
             osc.stop(ctx.currentTime + 0.1);
-        } catch (e) {
-            // Audio context might be blocked or unavailable
-        }
+        } catch (e) { }
     };
 
     useEffect(() => {
@@ -186,23 +151,20 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
             onMouseLeave={onMouseLeave}
             data-image={project.image}
         >
-            {/* We need to match the original structure or style it with Tailwind classnames effectively */}
-            {/* The user provided CSS has classes like 'project-data', 'artist', etc. I will keep the classes but add Tailwind equivalents for layout */}
-
-            <span ref={textRefs.artist} className="project-data artist hover-text w-1/4 truncate font-bold">
-                {project.artist}
+            <span className="project-data artist hover-text w-1/4 truncate font-bold">
+                <span ref={textRefs.artist}>{project.artist}</span>
             </span>
-            <span ref={textRefs.album} className="project-data album hover-text w-1/4 truncate">
-                {project.album}
+            <span className="project-data album hover-text w-1/4 truncate">
+                <span ref={textRefs.album}>{project.album}</span>
             </span>
-            <span ref={textRefs.category} className="project-data category hover-text w-1/6 hidden md:block">
-                {project.category}
+            <span className="project-data category hover-text w-1/6 hidden md:block">
+                <span ref={textRefs.category}>{project.category}</span>
             </span>
-            <span ref={textRefs.label} className="project-data label hover-text w-1/6 hidden md:block">
-                {project.label}
+            <span className="project-data label hover-text w-1/6 hidden md:block">
+                <span ref={textRefs.label}>{project.label}</span>
             </span>
-            <span ref={textRefs.year} className="project-data year hover-text w-1/12 text-right">
-                {project.year}
+            <span className="project-data year hover-text w-1/12 text-right">
+                <span ref={textRefs.year}>{project.year}</span>
             </span>
         </li>
     );
@@ -213,6 +175,8 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
     const [activeIndex, setActiveIndex] = useState(-1);
     const [isIdle, setIsIdle] = useState(true);
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+    const [hoveringVideo, setHoveringVideo] = useState(false);
 
     const backgroundRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -227,7 +191,6 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
         PROJECTS_DATA.forEach((project: any) => {
             if (project.image) {
                 const img = new Image();
-                //img.crossOrigin = "anonymous";
                 img.src = project.image;
             }
         });
@@ -274,16 +237,19 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
         }
     }, []);
 
-    // Handle mouse events
     const handleProjectMouseEnter = useCallback((index: number, imageUrl: string) => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
+        const project = PROJECTS_DATA[index];
         stopIdleAnimation();
         stopIdleTimer();
         setIsIdle(false);
+
         if (activeIndex === index) return;
         setActiveIndex(index);
+        setHoveringVideo(!!project?.videoSrc);
 
-        if (imageUrl && backgroundRef.current && !activeVideo) {
+        // ONLY show hover image if it's NOT a video item
+        if (!activeVideo && !project?.videoSrc && imageUrl && backgroundRef.current) {
             const bg = backgroundRef.current;
             bg.style.transition = "none";
             bg.style.backgroundImage = `url(${imageUrl})`;
@@ -294,18 +260,26 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                 bg.style.transform = "translate(-50%, -50%) scale(1.0)";
             });
         }
-    }, [activeIndex, activeVideo, stopIdleAnimation, stopIdleTimer]);
+    }, [activeIndex, activeVideo, PROJECTS_DATA, stopIdleAnimation, stopIdleTimer]);
 
     const handleProjectMouseLeave = useCallback(() => {
-        debounceRef.current = setTimeout(() => { }, 50);
+        if (debounceRef.current) clearTimeout(debounceRef.current);
+        debounceRef.current = setTimeout(() => {
+            // Cleanup on item leave handled by handleContainerMouseLeave
+        }, 50);
     }, []);
 
     const handleContainerMouseLeave = useCallback(() => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
         setActiveIndex(-1);
+        setHoveringVideo(false);
         if (backgroundRef.current) backgroundRef.current.style.opacity = "0";
-        if (!activeVideo) startIdleTimer();
-    }, [startIdleTimer, activeVideo]);
+        startIdleTimer();
+    }, [startIdleTimer]);
+
+    const handleMouseMove = useCallback((e: React.MouseEvent) => {
+        setMousePos({ x: e.clientX, y: e.clientY });
+    }, []);
 
     useEffect(() => {
         if (!activeVideo) startIdleTimer();
@@ -330,7 +304,6 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
     return (
         <>
             <div className="container relative w-full h-screen overflow-hidden bg-transparent text-white font-mono p-4">
-                {/* Close Video button */}
                 {activeVideo && (
                     <button
                         onClick={() => setActiveVideo(null)}
@@ -344,6 +317,7 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                     ref={containerRef}
                     className={`portfolio-container relative z-40 w-full max-w-6xl mx-auto top-1/2 transform -translate-y-1/2 transition-all duration-700 ${activeIndex !== -1 || activeVideo ? 'has-active' : ''} ${activeVideo ? 'opacity-20 pointer-events-none scale-95 blur-sm' : 'opacity-100'}`}
                     onMouseLeave={handleContainerMouseLeave}
+                    onMouseMove={handleMouseMove}
                 >
                     <h1 className="sr-only">Vikranth Jagdish Portfolio</h1>
                     <ul className="project-list flex flex-col gap-1" role="list">
@@ -363,7 +337,6 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                     </ul>
                 </main>
 
-                {/* Video Background Layer */}
                 <div className={`fixed inset-0 z-0 bg-black transition-opacity duration-1000 ${activeVideo ? 'opacity-100 shadow-[inset_0_0_200px_rgba(0,0,0,1)]' : 'opacity-0 pointer-events-none'}`}>
                     {activeVideo && (
                         <video
@@ -371,21 +344,21 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                             src={activeVideo}
                             autoPlay
                             loop
-                            className="w-full h-full object-cover mix-blend-screen opacity-60"
-                            onMouseEnter={(e: any) => e.target.play()}
+                            playsInline
+                            className="w-full h-full object-cover mix-blend-screen opacity-80"
                         />
                     )}
                 </div>
 
-                {/* Custom Background Layer (Dithering Shader) */}
-                <div className={`fixed inset-0 pointer-events-none -z-10 transition-opacity duration-700 ${activeIndex === -1 && !activeVideo ? 'opacity-100' : 'opacity-0'}`}>
-                    {CustomBackground}
-                </div>
+                {CustomBackground && (
+                    <div className={`fixed inset-0 pointer-events-none -z-10 transition-opacity duration-1000 ${activeIndex === -1 && !activeVideo ? 'opacity-100' : 'opacity-0'}`}>
+                        {CustomBackground}
+                    </div>
+                )}
 
                 <div
                     ref={backgroundRef}
-                    className="background-image pointer-events-none fixed top-1/2 left-1/2 w-full h-full -z-0 opacity-0 bg-cover bg-center object-cover mix-blend-screen"
-                    style={{ width: '100vw', height: '100vh', transform: 'translate(-50%, -50%)' }}
+                    className="background-image pointer-events-none fixed inset-0 -z-0 opacity-0 bg-cover bg-center object-cover mix-blend-screen transition-opacity duration-1000 ease-in-out"
                     id="backgroundImage"
                     role="img"
                     aria-hidden="true"
@@ -415,6 +388,26 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                     </div>
                     <TimeDisplay CONFIG={CONFIG} />
                 </aside>
+
+                {/* Mouse Follower Tooltip */}
+                {hoveringVideo && !activeVideo && (
+                    <div
+                        className="fixed z-[100] pointer-events-none flex flex-col items-center justify-center transition-transform duration-75 ease-out mix-blend-difference"
+                        style={{
+                            left: mousePos.x,
+                            top: mousePos.y,
+                            transform: 'translate(-50%, -150%)'
+                        }}
+                    >
+                        <div className="bg-[var(--color-accent)] text-black text-[10px] font-bold px-3 py-1 uppercase tracking-[0.2em] shadow-lg whitespace-nowrap border border-black/20">
+                            CLICK TO PLAY
+                        </div>
+                        <div className="w-px h-8 bg-[var(--color-accent)] mt-1 opacity-50"></div>
+                    </div>
+                )}
+
+                <style jsx>{`
+                `}</style>
             </div>
         </>
     );
