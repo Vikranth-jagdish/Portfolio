@@ -16,6 +16,8 @@ export const metadata: Metadata = {
   keywords: ["Vikranth Jagdish", "Portfolio", "Full Stack", "Developer", "Chennai", "Next.js"],
 };
 
+import { GlobalSpotifyCard } from "@/components/global-spotify-card";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,6 +41,7 @@ export default function RootLayout({
           />
         </div>
         {children}
+        <GlobalSpotifyCard />
       </body>
     </html>
   );

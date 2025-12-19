@@ -2,7 +2,7 @@ import DemoPortfolio from "@/components/demo";
 
 export default function Home() {
   return (
-    <main className="w-full h-screen">
+    <main className="w-full h-screen relative">
       <DemoPortfolio />
     </main>
   );

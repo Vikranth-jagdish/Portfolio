@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import TopTracksList from "@/components/ui/top-tracks-list";
 
 export default function StatsPage() {
     return (
@@ -26,10 +27,10 @@ export default function StatsPage() {
                     <p className="text-gray-400">Live metrics from across the multiverse.</p>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-12">
 
                     {/* Github Section */}
-                    <section className="col-span-1 md:col-span-2 space-y-6">
+                    <section className="space-y-6">
                         <h2 className="text-xl font-bold border-b border-gray-800 pb-2 flex items-center gap-2">
                             GITHUB ACTIVITY
                             <a href="https://github.com/Vikranth-jagdish" target="_blank" className="text-[var(--color-accent)] hover:underline ml-auto text-xs flex items-center gap-1">
@@ -39,7 +40,6 @@ export default function StatsPage() {
 
                         <div className="bg-white/5 border border-white/10 rounded-lg p-4 backdrop-blur-sm">
                             <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                                {/* Added hide_rank=true */}
                                 <img
                                     src="https://github-readme-stats.vercel.app/api?username=Vikranth-jagdish&show_icons=true&theme=dark&bg_color=00000000&hide_border=true&title_color=ffdf00&icon_color=ffdf00&text_color=ffffff&hide_rank=true"
                                     alt="Github Stats"
@@ -55,7 +55,6 @@ export default function StatsPage() {
 
                         <div className="bg-white/5 border border-white/10 rounded-lg p-4 backdrop-blur-sm overflow-x-auto">
                             <h3 className="text-sm text-gray-400 mb-4 uppercase tracking-wider">Contribution Graph</h3>
-                            {/* Made heatmap bigger by ensuring min-width */}
                             <img
                                 src="https://ghchart.rshah.org/ffdf00/Vikranth-jagdish"
                                 alt="Github Contribution Graph"
@@ -64,37 +63,55 @@ export default function StatsPage() {
                         </div>
                     </section>
 
-                    {/* Monkeytype Section */}
-                    <section className="col-span-1 space-y-6">
-                        <h2 className="text-xl font-bold border-b border-gray-800 pb-2 flex items-center gap-2">
-                            TYPING SPEED
-                            <a href="https://monkeytype.com/profile/VikranthJagdish" target="_blank" className="text-[var(--color-accent)] hover:underline ml-auto text-xs flex items-center gap-1">
-                                MONKEYTYPE <ExternalLink size={10} />
-                            </a>
-                        </h2>
+                    {/* Grid for Monkeytype and Spotify */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        {/* Monkeytype Section */}
+                        <section className="space-y-6">
+                            <h2 className="text-xl font-bold border-b border-gray-800 pb-2 flex items-center gap-2">
+                                TYPING SPEED
+                                <a href="https://monkeytype.com/profile/VikranthJagdish" target="_blank" className="text-[var(--color-accent)] hover:underline ml-auto text-xs flex items-center gap-1">
+                                    MONKEYTYPE <ExternalLink size={10} />
+                                </a>
+                            </h2>
 
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 backdrop-blur-sm flex flex-col items-center justify-center min-h-[200px] hover:bg-white/10 transition-colors group cursor-pointer relative overflow-hidden">
-                            <a href="https://monkeytype.com/profile/VikranthJagdish" target="_blank" rel="noreferrer" className="w-full">
-                                <img
-                                    alt="My Monkeytype stats"
-                                    src="https://monkeytype-readme.zeabur.app/generate-svg/VikranthJagdish/nord_light?lbpb=true"
-                                    className="w-full h-auto"
-                                />
-                            </a>
-                        </div>
-                    </section>
-
-                    {/* Spotify Section */}
-                    <section className="col-span-1 space-y-6">
-                        <h2 className="text-xl font-bold border-b border-gray-800 pb-2 flex items-center gap-2">
-                            ON REPEAT
-                            <span className="text-xs text-gray-500 ml-auto">SPOTIFY</span>
-                        </h2>
-
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 backdrop-blur-sm min-h-[200px] flex items-center justify-center">
-                            <div className="text-center space-y-2">
-                                <p className="text-gray-500 italic">"Listening to lo-fi beats..."</p>
+                            <div className="w-full flex justify-start group cursor-pointer relative pt-4">
+                                <a href="https://monkeytype.com/profile/VikranthJagdish" target="_blank" rel="noreferrer" className="w-full">
+                                    <img
+                                        alt="My Monkeytype stats"
+                                        src="https://monkeytype-readme.zeabur.app/generate-svg/VikranthJagdish/serika_dark?lbpb=true"
+                                        className="w-full h-auto object-contain"
+                                    />
+                                </a>
                             </div>
+                        </section>
+
+                        {/* Top Tracks Section */}
+                        <section className="space-y-6">
+                            <h2 className="text-xl font-bold border-b border-gray-800 pb-2 flex items-center gap-2">
+                                TOP TRACKS
+                                <span className="text-xs text-gray-500 ml-auto">SPOTIFY (LAST 4 WEEKS)</span>
+                            </h2>
+                            <TopTracksList />
+                        </section>
+                    </div>
+
+                    {/* Spotify Playlist Embed */}
+                    <section className="space-y-6">
+                        <h2 className="text-xl font-bold border-b border-gray-800 pb-2 flex items-center gap-2">
+                            PLAYLIST
+                            <span className="text-xs text-gray-500 ml-auto">RECOMMENDATIONS</span>
+                        </h2>
+                        <div className="w-full bg-white/5 border border-white/10 rounded-lg overflow-hidden backdrop-blur-sm">
+                            <iframe
+                                title="Spotify Embed: Recommendation Playlist "
+                                src={`https://open.spotify.com/embed/playlist/3inAeOAlPSTP3favtJ7dF7?utm_source=generator&theme=0`}
+                                width="100%"
+                                height="100%"
+                                style={{ minHeight: '360px' }}
+                                frameBorder="0"
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy"
+                            />
                         </div>
                     </section>
 
