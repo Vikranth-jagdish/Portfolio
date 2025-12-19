@@ -62,30 +62,69 @@ export const ROOT_CATEGORIES = [
 export const PROJECTS_DATA_DETAILED = [
     {
         id: 1,
-        artist: "E-COMMERCE",
-        album: "FULL STACK",
+        artist: "HEALTHPILOT.AI",
+        album: "AI-NATIVE PLATFORM",
         category: "NEXT.JS",
         label: "LIVE",
-        year: "2024",
-        image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=2564&auto=format&fit=crop"
+        year: "2025",
+        image: "https://images.unsplash.com/photo-1576091160550-217359f4ebf4?q=80&w=2670&auto=format&fit=crop",
+        link: "https://healthpilot.ai",
+        techLogos: [
+            "https://cdn.worldvectorlogo.com/logos/next-js.svg",
+            "https://cdn.worldvectorlogo.com/logos/typescript.svg",
+            "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
+            "https://cdn.worldvectorlogo.com/logos/supabase.svg"
+        ],
+        description: "An AI-native platform designed specifically for obesity physicians to monitor patient progress and personalize weight-loss journeys with surgical precision. It handles complex medical datasets, treatment protocols, and real-time biometric monitoring.\n\nKey achievements:\n- Orchestrated a medical-grade data pipeline for real-time patient tracking.\n- Integrated AI-driven analytics to predict treatment outcomes.\n- Built a high-security environment for healthcare data management using Clerk and Supabase.\n\nTech Stack Overview:\n⚛️ Next.js (App Router) for high-performance frontend architecture.\n📘 TypeScript for robust, type-safe development.\n🎨 Tailwind CSS for a sleek, medical-grade UI.\n🛡️ Clerk Authentication for secure physician portals.\n🗄️ Supabase (PostgreSQL) for scalable backend infrastructure."
     },
     {
         id: 2,
-        artist: "AI ANALYTICS",
-        album: "DASHBOARD",
-        category: "REACT",
-        label: "BETA",
+        artist: "AGENTIC GRAPH RAG",
+        album: "ICMR DOCUMENTS",
+        category: "AGENTIC AI",
+        label: "R&D",
         year: "2024",
-        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop"
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2670&auto=format&fit=crop",
+        techLogos: [
+            "https://cdn.worldvectorlogo.com/logos/python-5.svg",
+            "https://cdn.worldvectorlogo.com/logos/fastapi-1.svg",
+            "https://cdn.worldvectorlogo.com/logos/neo4j.svg",
+            "https://cdn.worldvectorlogo.com/logos/postgresql.svg",
+            "https://cdn.worldvectorlogo.com/logos/openai-2.svg"
+        ],
+        description: "Medical Knowledge Graph RAG - Clinical Decision Support System. An advanced AI-powered clinical system that combines traditional RAG with knowledge graph capabilities to provide evidence-based differential diagnosis and treatment planning based on ICMR guidelines.\n\nSystem Capabilities:\n- Document Ingestion Pipeline: Processes ICMR medical guidelines with semantic chunking and medical entity extraction.\n- Knowledge Graph Architecture: Built using Neo4j and Graphiti to map temporal connections between conditions, medications, and protocols.\n- AI Clinical Agent: A Pydantic AI-powered conversational agent capable of cross-referencing vector databases and knowledge graphs.\n\nTech Stack:\n🐍 Python 3.11+\n🤖 Pydantic AI (Agent Framework)\n⚙️ FastAPI (Streaming API)\n🔗 Neo4j & Graphiti (Temporal Knowledge Graph)\n🐘 PostgreSQL & PGVector (Vector Database)\n⚡ GPT-4 / Gemini / Ollama"
     },
     {
         id: 3,
-        artist: "FINANCE APP",
-        album: "MOBILE",
-        category: "REACT NATIVE",
-        label: "APP STORE",
-        year: "2023",
-        image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=2671&auto=format&fit=crop"
+        artist: "CODECHEF CLONE",
+        album: "WEBSITE CLONE",
+        category: "REACT",
+        label: "STUDY",
+        year: "2024",
+        image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=2564&auto=format&fit=crop",
+        techLogos: [
+            "https://cdn.worldvectorlogo.com/logos/react-2.svg",
+            "https://cdn.worldvectorlogo.com/logos/typescript.svg",
+            "https://cdn.worldvectorlogo.com/logos/tailwindcss.svg",
+            "https://cdn.worldvectorlogo.com/logos/framer-motion.svg"
+        ],
+        description: "A high-fidelity clone of the Codechef competitive programming platform. This project serves as a deep dive into complex UI components and high-performance real-time data handling.\n\nFeatures:\n- Real-time Leaderboards: Synchronized competitive programming rankings.\n- Problem Editor: A sophisticated code editor environment for practice.\n- Responsive Architecture: Optimized for all devices to ensure a seamless coding experience.\n\nTech Stack:\n⚛️ React.js (Component Architecture)\n📘 TypeScript (Type Safety)\n💨 Tailwind CSS (Styling)\n⚡ Framer Motion (Micro-interactions)\n🧩 Custom UI Library tailored for high-density information display."
+    },
+    {
+        id: 4,
+        artist: "VOICE AGENT",
+        album: "LIVEKIT AI",
+        category: "HEALTHCARE",
+        label: "NEW",
+        year: "2024",
+        image: "https://images.unsplash.com/photo-1589254065878-42c9da997008?q=80&w=2670&auto=format&fit=crop",
+        techLogos: [
+            "https://cdn.worldvectorlogo.com/logos/python-5.svg",
+            "https://cdn.worldvectorlogo.com/logos/openai-2.svg",
+            "https://cdn.worldvectorlogo.com/logos/fastapi-1.svg",
+            "https://cdn.worldvectorlogo.com/logos/livekit.svg"
+        ],
+        description: "A voice-activated AI agent built with LiveKit that interactively asks patients questions during website visits and securely relays answers to healthcare providers. It streamlines the intake process and optimizes physician time.\n\nKey Components:\n- Real-time Voice Streaming: Low-latency communication using LiveKit Cloud.\n- AI Patient Assessment: Natural language understanding using GPT-4.\n- Healthcare Provider Dashboard: Securely relayed data for immediate physician review.\n\nTech Stack:\n🐍 Python (Backend Logic)\n🎙️ LiveKit AI (Voice Streaming & WebRTC)\n🤖 OpenAI GPT-4 / Gemini (Conversation Engine)\n⚙️ FastAPI (Asynchronous Data Handling)\n🐳 Docker (Deployment Strategy)"
     }
 ];
 
@@ -171,8 +210,26 @@ export const VIDEOS_DATA = [
 ];
 
 export const LABS_DATA = [
-    { id: 1, artist: "SHADER 01", album: "WEBGL", category: "THREE.JS", label: "EXP", year: "2024", image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop" },
-    { id: 2, artist: "PARTICLES", album: "CANVAS", category: "PHYSICS", label: "TEST", year: "2023", image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2672&auto=format&fit=crop" }
+    {
+        id: 1,
+        artist: "N8N",
+        album: "AUTOMATION",
+        category: "WORKFLOW",
+        label: "SELF-HOSTED",
+        year: "2024",
+        image: "https://images.unsplash.com/photo-1518433278981-16773f84841d?q=80&w=2564&auto=format&fit=crop",
+        link: "https://n8n.vikranth.space"
+    },
+    {
+        id: 2,
+        artist: "SUPABASE",
+        album: "BACKEND",
+        category: "DATABASE",
+        label: "CLOUD",
+        year: "2024",
+        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2670&auto=format&fit=crop",
+        link: "https://supabase.vikranth.space"
+    }
 ];
 
 export const STATS_DATA = [

@@ -55,7 +55,7 @@ const TimeDisplay = ({ CONFIG = {} }: any) => {
 };
 
 // Project Item Component
-const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isIdle }: any) => {
+const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isIdle, isExpanded }: any) => {
     const itemRef = useRef(null);
     const textRefs = {
         artist: useRef<HTMLElement>(null),
@@ -146,26 +146,71 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
     return (
         <li
             ref={itemRef}
-            className={`project-item group relative flex items-center justify-between py-2 border-b border-white/10 cursor-pointer transition-all duration-300 ${isActive ? 'active opacity-100' : 'opacity-70'} ${isIdle ? 'idle' : ''} hover:opacity-100 hover:pl-4`}
+            className={`project-item group relative flex flex-col border-b border-white/10 cursor-pointer transition-all duration-300 ${isActive ? 'active opacity-100' : 'opacity-70'} ${isIdle ? 'idle' : ''} hover:opacity-100`}
             onMouseEnter={() => onMouseEnter(index, project.image)}
             onMouseLeave={onMouseLeave}
             data-image={project.image}
         >
-            <span className="project-data artist hover-text w-1/4 truncate font-bold">
-                <span ref={textRefs.artist}>{project.artist}</span>
-            </span>
-            <span className="project-data album hover-text w-1/4 truncate">
-                <span ref={textRefs.album}>{project.album}</span>
-            </span>
-            <span className="project-data category hover-text w-1/6 hidden md:block">
-                <span ref={textRefs.category}>{project.category}</span>
-            </span>
-            <span className="project-data label hover-text w-1/6 hidden md:block">
-                <span ref={textRefs.label}>{project.label}</span>
-            </span>
-            <span className="project-data year hover-text w-1/12 text-right">
-                <span ref={textRefs.year}>{project.year}</span>
-            </span>
+            <div className={`flex items-center justify-between py-2 transition-all duration-300 ${isActive ? 'pl-4' : ''}`}>
+                <span className="project-data artist hover-text w-1/4 truncate font-bold">
+                    <span ref={textRefs.artist}>{project.artist}</span>
+                </span>
+                <span className="project-data album hover-text w-1/4 truncate">
+                    <span ref={textRefs.album}>{project.album}</span>
+                </span>
+                <span className="project-data category hover-text w-1/6 hidden md:block">
+                    <span ref={textRefs.category}>{project.category}</span>
+                </span>
+                <span className="project-data label hover-text w-1/6 hidden md:block">
+                    <span ref={textRefs.label}>{project.label}</span>
+                </span>
+                <span className="project-data year hover-text w-1/12 text-right flex items-center justify-end gap-2">
+                    <span ref={textRefs.year}>{project.year}</span>
+                    {project.description && (
+                        <span className={`text-[8px] transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    )}
+                </span>
+            </div>
+
+            {/* Description Dropdown */}
+            <div className={`overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] ${isExpanded ? 'max-h-[800px] opacity-100 py-8 mb-4' : 'max-h-0 opacity-0'}`}>
+                <div className="flex flex-col md:flex-row gap-8 pl-4 pr-12 border-l-2 border-[var(--color-accent)] ml-2">
+                    {/* Tech Logos Top Left */}
+                    <div className="flex flex-col gap-6 md:w-1/4">
+                        <div className="flex flex-wrap gap-4">
+                            {project.techLogos?.map((logo: string, i: number) => (
+                                <div key={i} className="w-14 h-14 bg-white/5 p-2 rounded-lg flex items-center justify-center backdrop-blur-sm border border-white/10 hover:border-[var(--color-accent)] hover:scale-110 transition-all duration-300">
+                                    <img src={logo} alt="Tech Logo" className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]" />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-[0.3em] opacity-40">Tech Stack</p>
+                            <div className="h-px w-full bg-gradient-to-r from-[var(--color-accent)]/50 to-transparent"></div>
+                        </div>
+                    </div>
+
+                    {/* Description Content */}
+                    <div className="flex-1 space-y-6">
+                        <div className="description-text text-sm md:text-base leading-relaxed text-gray-200 font-mono whitespace-pre-wrap">
+                            {project.description}
+                        </div>
+
+                        {project.link && (
+                            <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-3 px-6 py-3 bg-[var(--color-accent)] text-black font-bold uppercase tracking-widest text-xs hover:scale-105 transition-transform"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <span>[ VISIT PROJECT ]</span>
+                                <span className="text-[10px]">↗</span>
+                            </a>
+                        )}
+                    </div>
+                </div>
+            </div>
         </li>
     );
 };
@@ -173,6 +218,7 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
 // Main Portfolio Component
 const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CONFIG = {}, SOCIAL_LINKS = {}, CustomBackground }: any) => {
     const [activeIndex, setActiveIndex] = useState(-1);
+    const [expandedIndex, setExpandedIndex] = useState(-1);
     const [isIdle, setIsIdle] = useState(true);
     const [activeVideo, setActiveVideo] = useState<string | null>(null);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -248,19 +294,28 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
         setActiveIndex(index);
         setHoveringVideo(!!project?.videoSrc);
 
-        // ONLY show hover image if it's NOT a video item
-        if (!activeVideo && !project?.videoSrc && imageUrl && backgroundRef.current) {
-            const bg = backgroundRef.current;
-            bg.style.transition = "none";
-            bg.style.backgroundImage = `url(${imageUrl})`;
-            bg.style.opacity = "1";
-            bg.style.transform = "translate(-50%, -50%) scale(1.1)";
-            requestAnimationFrame(() => {
-                bg.style.transition = "opacity 0.6s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
-                bg.style.transform = "translate(-50%, -50%) scale(1.0)";
-            });
+        // STRICT BACKGROUND SUPPRESSION
+        // If an item is expanded, or a video is active, or we have a custom spiral background, 
+        // we should NEVER show the hover-based background images.
+        if (expandedIndex !== -1 || activeVideo || project?.videoSrc || CustomBackground || !imageUrl || !backgroundRef.current) {
+            if (backgroundRef.current) {
+                backgroundRef.current.style.opacity = "0";
+                backgroundRef.current.style.backgroundImage = "none";
+            }
+            return;
         }
-    }, [activeIndex, activeVideo, PROJECTS_DATA, stopIdleAnimation, stopIdleTimer]);
+
+        // Only show hover image if all conditions are met
+        const bg = backgroundRef.current;
+        bg.style.transition = "none";
+        bg.style.backgroundImage = `url(${imageUrl})`;
+        bg.style.opacity = "1";
+        bg.style.transform = "translate(-50%, -50%) scale(1.1)";
+        requestAnimationFrame(() => {
+            bg.style.transition = "opacity 0.6s ease, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)";
+            bg.style.transform = "translate(-50%, -50%) scale(1.0)";
+        });
+    }, [activeIndex, activeVideo, PROJECTS_DATA, stopIdleAnimation, stopIdleTimer, expandedIndex, CustomBackground]);
 
     const handleProjectMouseLeave = useCallback(() => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -289,13 +344,24 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
         };
     }, [startIdleTimer, stopIdleTimer, stopIdleAnimation, activeVideo]);
 
-    const handleProjectClick = (project: any) => {
+    const handleProjectClick = (project: any, index: number) => {
         if (project.videoSrc) {
             setActiveVideo(project.videoSrc);
             setActiveIndex(-1);
             stopIdleAnimation();
             stopIdleTimer();
-            if (backgroundRef.current) backgroundRef.current.style.opacity = "0";
+            if (backgroundRef.current) {
+                backgroundRef.current.style.opacity = "0";
+                backgroundRef.current.style.backgroundImage = "none";
+            }
+        } else if (project.description) {
+            const isOpening = expandedIndex !== index;
+            setExpandedIndex(isOpening ? index : -1);
+            setActiveIndex(-1); // Reset hover state on click
+            if (isOpening && backgroundRef.current) {
+                backgroundRef.current.style.opacity = "0";
+                backgroundRef.current.style.backgroundImage = "none";
+            }
         } else if (CALLBACKS.onProjectClick) {
             CALLBACKS.onProjectClick(project);
         }
@@ -322,13 +388,14 @@ const MusicPortfolio = ({ PROJECTS_DATA = [], LOCATION = {}, CALLBACKS = {}, CON
                     <h1 className="sr-only">Vikranth Jagdish Portfolio</h1>
                     <ul className="project-list flex flex-col gap-1" role="list">
                         {PROJECTS_DATA.map((project: any, index: number) => (
-                            <div key={project.id || index} onClick={() => handleProjectClick(project)}>
+                            <div key={project.id || index} onClick={() => handleProjectClick(project, index)}>
                                 <ProjectItem
                                     project={project}
                                     index={index}
                                     onMouseEnter={handleProjectMouseEnter}
                                     onMouseLeave={handleProjectMouseLeave}
                                     isActive={activeIndex === index}
+                                    isExpanded={expandedIndex === index}
                                     isIdle={isIdle}
                                     ref={(el: any) => projectItemsRef.current[index] = el}
                                 />
