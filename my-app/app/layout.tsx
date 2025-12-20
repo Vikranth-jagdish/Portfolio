@@ -14,6 +14,16 @@ export const metadata: Metadata = {
   title: "Vikranth Jagdish | Portfolio",
   description: "Portfolio of Vikranth Jagdish, Full Stack Developer & Designer based in Chennai.",
   keywords: ["Vikranth Jagdish", "Portfolio", "Full Stack", "Developer", "Chennai", "Next.js"],
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 import { GlobalSpotifyCard } from "@/components/global-spotify-card";

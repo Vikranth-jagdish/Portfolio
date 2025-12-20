@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Briefcase, Calendar, MapPin, ExternalLink, ChevronRight } from 'lucide-react';
 import { EXPERIENCE_DATA } from '@/lib/data';
+import { playHoverSound, playClickSound } from '@/lib/sound-utils';
 
 // Custom Scramble Hook for clean usage
 const useScramble = (text: string, isActive: boolean) => {
@@ -36,25 +37,6 @@ const useScramble = (text: string, isActive: boolean) => {
     return displayText;
 };
 
-// Sound Effect Utility
-const playHoverSound = () => {
-    try {
-        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-        if (!AudioContext) return;
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(1200, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
-    } catch (e) { }
-};
 
 const ExperienceCard = ({ item, index }: { item: any; index: number }) => {
     const [isHovered, setIsHovered] = useState(false);
@@ -134,6 +116,7 @@ export default function ExperiencePage() {
                 <Link
                     href="/"
                     className="flex items-center gap-2 text-sm text-[var(--color-accent)] hover:opacity-80 transition-opacity uppercase"
+                    onClick={() => playClickSound()}
                 >
                     <ArrowLeft size={16} />
                     Back
@@ -190,6 +173,7 @@ export default function ExperiencePage() {
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-3 px-8 py-4 bg-white/5 border border-white/10 rounded-full text-white text-xs uppercase tracking-widest hover:bg-[var(--color-accent)] hover:text-black hover:border-[var(--color-accent)] transition-all duration-500 font-bold group"
+                        onClick={() => playClickSound()}
                     >
                         Download Full Resume
                         <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />

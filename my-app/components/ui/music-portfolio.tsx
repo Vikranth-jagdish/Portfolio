@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
+import { playHoverSound, playClickSound } from '@/lib/sound-utils';
 
 // Register GSAP plugin
 try {
@@ -94,30 +95,6 @@ const ProjectItem = ({ project, index, onMouseEnter, onMouseLeave, isActive, isI
         return interval;
     };
 
-    // Custom Sound Effect
-    const playHoverSound = () => {
-        try {
-            const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-            if (!AudioContext) return;
-
-            const ctx = new AudioContext();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(1200, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
-
-            gain.gain.setValueAtTime(0.05, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-
-            osc.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.start();
-            osc.stop(ctx.currentTime + 0.1);
-        } catch (e) { }
-    };
 
     useEffect(() => {
         const intervals: any[] = [];
@@ -353,6 +330,7 @@ const MusicPortfolio = ({
     }, [startIdleTimer, stopIdleTimer, stopIdleAnimation, activeVideo]);
 
     const handleProjectClick = (project: any, index: number) => {
+        playClickSound();
         if (project.videoSrc) {
             setActiveVideo(project.videoSrc);
             setActiveIndex(-1);
@@ -441,7 +419,7 @@ const MusicPortfolio = ({
 
                 <aside className="corner-elements fixed inset-0 pointer-events-none p-6">
                     <div className="corner-item top-left fixed top-4 left-4 z-50">
-                        <div className="corner-square w-3 h-3 bg-[var(--color-accent)]" aria-hidden="true"></div>
+                        <div className="corner-square w-2 h-2 bg-[var(--color-accent)]" aria-hidden="true"></div>
                         <p className="mt-2 text-xs text-[var(--color-accent)] font-bold">VIKRANTH JAGDISH</p>
                     </div>
                     <nav className="corner-item top-right fixed top-4 right-4 z-50 pointer-events-auto text-xs flex gap-3 text-[var(--color-accent)] uppercase">
