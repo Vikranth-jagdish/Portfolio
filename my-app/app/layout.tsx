@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-import { Space_Mono } from "next/font/google";
+import "@fontsource/space-mono/400.css";
+import "@fontsource/space-mono/700.css";
 import "./globals.css";
 
 import { DitheringShader } from "@/components/ui/dithering-shader";
-
-const spaceMono = Space_Mono({
-  weight: ['400', '700'],
-  subsets: ["latin"],
-  variable: "--font-mono",
-});
 
 export const metadata: Metadata = {
   title: "Vikranth Jagdish | Portfolio",
@@ -37,7 +32,8 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning
-        className={`${spaceMono.variable} antialiased bg-black text-white`}
+        className="antialiased bg-black text-white"
+        style={{ fontFamily: "'Space Mono', monospace" }}
       >
         <div className="fixed inset-0 pointer-events-none -z-10 opacity-40">
           <DitheringShader
