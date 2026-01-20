@@ -56,6 +56,16 @@ export const ROOT_CATEGORIES = [
         year: "->",
         image: "",
         action: "/stats"
+    },
+    {
+        id: "blogs",
+        artist: "BLOGS",
+        album: "WRITINGS",
+        category: "ARTICLES",
+        label: "NEW",
+        year: "->",
+        image: "",
+        action: "/blogs"
     }
 ];
 
