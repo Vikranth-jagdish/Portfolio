@@ -55,7 +55,7 @@ export default function BlogsList() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
         >
-          <Link href={`/blogs/${blog.slug}`}>
+          <Link href={`/blogs/${encodeURIComponent(blog.slug)}`}>
             <div className="group cursor-pointer bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 hover:border-[var(--color-accent)]/50 transition-all duration-300">
               <div className="flex items-start gap-3">
                 <div className="mt-1 text-[var(--color-accent)]">

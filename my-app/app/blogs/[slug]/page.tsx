@@ -18,8 +18,9 @@ interface BlogContent {
 }
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
+  const decodedSlug = decodeURIComponent(params.slug);
   const { data, error, isLoading } = useSWR<BlogContent>(
-    `/api/blogs/${params.slug}`,
+    `/api/blogs/${decodedSlug}`,
     fetcher
   );
 
