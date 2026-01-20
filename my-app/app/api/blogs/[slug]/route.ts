@@ -6,10 +6,10 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const blogsDirectory = path.join(process.cwd(), 'blogs');
     const filePath = path.join(blogsDirectory, `${slug}.txt`);
 

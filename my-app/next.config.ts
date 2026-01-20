@@ -13,7 +13,15 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.worldvectorlogo.com',
+        pathname: '**',
+      },
     ],
+  },
+  experimental: {
+    turbopackUseSystemTlsCerts: true,
   },
 };
 
