@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Calendar } from "lucide-react";
 import useSWR from "swr";
 import { motion } from "framer-motion";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
+    if (!res.ok) throw new Error("Failed to fetch");
+    return res.json();
+  });
 
 interface BlogContent {
   slug: string;
@@ -17,8 +21,9 @@ interface BlogContent {
   modifiedAt: string;
 }
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
-  const decodedSlug = decodeURIComponent(params.slug);
+export default function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
+  const decodedSlug = decodeURIComponent(slug);
   const { data, error, isLoading } = useSWR<BlogContent>(
     `/api/blogs/${decodedSlug}`,
     fetcher
