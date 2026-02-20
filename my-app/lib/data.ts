@@ -58,6 +58,16 @@ export const ROOT_CATEGORIES = [
         action: "/stats"
     },
     {
+        id: "photos",
+        artist: "PHOTOS",
+        album: "GALLERY",
+        category: "PINTEREST",
+        label: "CLICKS",
+        year: "->",
+        image: "",
+        action: "/photos"
+    },
+    {
         id: "blogs",
         artist: "BLOGS",
         album: "WRITINGS",
@@ -246,6 +256,82 @@ export const STATS_DATA = [
     { id: 1, artist: "GITHUB", album: "COMMITS", category: "CODE", label: "ACTIVE", year: "STATS", image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=2688&auto=format&fit=crop" },
     { id: 2, artist: "MONKEYTYPE", album: "SPEED", category: "WPM", label: "FAST", year: "STATS", image: "https://images.unsplash.com/photo-1542435503-956c469947f6?q=80&w=2574&auto=format&fit=crop" },
     { id: 3, artist: "SPOTIFY", album: "TOP ARTISTS", category: "MUSIC", label: "VIBE", year: "STATS", image: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?q=80&w=2574&auto=format&fit=crop" }
+];
+
+// Photos data — replace the `src` URLs below with your actual Pinterest image URLs
+export const PHOTOS_DATA = [
+    {
+        id: 1,
+        src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
+        alt: "Landscape vista",
+        span: "tall" as const,
+    },
+    {
+        id: 2,
+        src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80",
+        alt: "Mountain night sky",
+        span: "wide" as const,
+    },
+    {
+        id: 3,
+        src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
+        alt: "Foggy forest",
+        span: "normal" as const,
+    },
+    {
+        id: 4,
+        src: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80",
+        alt: "Green meadow",
+        span: "normal" as const,
+    },
+    {
+        id: 5,
+        src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80",
+        alt: "Tropical beach",
+        span: "wide" as const,
+    },
+    {
+        id: 6,
+        src: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=800&q=80",
+        alt: "Ocean waves",
+        span: "tall" as const,
+    },
+    {
+        id: 7,
+        src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80",
+        alt: "Lake reflection",
+        span: "normal" as const,
+    },
+    {
+        id: 8,
+        src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+        alt: "Sunlit valley",
+        span: "normal" as const,
+    },
+    {
+        id: 9,
+        src: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80",
+        alt: "Waterfall bridge",
+        span: "tall" as const,
+    },
+    {
+        id: 10,
+        src: "https://images.unsplash.com/photo-1482192505345-5655af888cc4?w=800&q=80",
+        alt: "City lights",
+        span: "wide" as const,
+    },
+    {
+        id: 11,
+        src: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=800&q=80",
+        alt: "Wildflowers",
+        span: "normal" as const,
+    },
+    {
+        id: 12,
+        src: "https://images.unsplash.com/photo-1414609245224-afa02bfb3fda?w=800&q=80",
+        alt: "Desert road",
+        span: "normal" as const,
+    },
 ];
 
 export const GLOBAL_CONFIG = {
