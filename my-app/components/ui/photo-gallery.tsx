@@ -1,19 +1,12 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { PHOTOS_DATA, GLOBAL_SOCIAL_LINKS, GLOBAL_CONFIG } from "@/lib/data";
-import { playHoverSound, playClickSound } from "@/lib/sound-utils";
+import { GLOBAL_SOCIAL_LINKS, GLOBAL_CONFIG } from "@/lib/data";
+import { playClickSound } from "@/lib/sound-utils";
 
-interface Photo {
-    id: number;
-    src: string;
-    alt: string;
-    span: "normal" | "wide" | "tall";
-}
-
-const PINTEREST_BOARD_URL = "https://pin.it/1G6IkvC1j";
+const PINTEREST_BOARD_URL = "https://www.pinterest.com/unbalanceddiode/my-pictures/";
 
 // Time Display (matching portfolio style)
 const TimeDisplay = ({ CONFIG = {} }: any) => {
@@ -55,205 +48,42 @@ const TimeDisplay = ({ CONFIG = {} }: any) => {
     );
 };
 
-// Lightbox modal for viewing a single photo
-const Lightbox = ({
-    photo,
-    onClose,
-    onPrev,
-    onNext,
-}: {
-    photo: Photo;
-    onClose: () => void;
-    onPrev: () => void;
-    onNext: () => void;
-}) => {
-    useEffect(() => {
-        const handleKey = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
-            if (e.key === "ArrowLeft") onPrev();
-            if (e.key === "ArrowRight") onNext();
-        };
-        window.addEventListener("keydown", handleKey);
-        return () => window.removeEventListener("keydown", handleKey);
-    }, [onClose, onPrev, onNext]);
-
-    return (
-        <motion.div
-            className="fixed inset-0 z-[200] flex items-center justify-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-        >
-            {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-black/95 backdrop-blur-md"
-                onClick={onClose}
-            />
-
-            {/* Close button */}
-            <button
-                onClick={onClose}
-                className="absolute top-6 right-6 z-[210] px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] uppercase tracking-[0.3em] font-bold transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-                [ CLOSE ]
-            </button>
-
-            {/* Navigation arrows */}
-            <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onPrev();
-                }}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-[210] w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-lg transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-                &larr;
-            </button>
-            <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onNext();
-                }}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[210] w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 text-lg transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-                &rarr;
-            </button>
-
-            {/* Image */}
-            <motion.div
-                className="relative z-[205] max-w-[90vw] max-h-[85vh]"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
-            >
-                <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className="max-w-full max-h-[85vh] object-contain"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-white/60 font-mono">
-                        {photo.alt}
-                    </p>
-                </div>
-            </motion.div>
-        </motion.div>
-    );
-};
-
-// Individual photo card
-const PhotoCard = ({
-    photo,
-    index,
-    onClick,
-}: {
-    photo: Photo;
-    index: number;
-    onClick: () => void;
-}) => {
-    const spanClasses = {
-        normal: "",
-        wide: "md:col-span-2",
-        tall: "md:row-span-2",
-    };
-
-    return (
-        <motion.div
-            className={`group relative overflow-hidden cursor-pointer bg-white/[0.02] ${spanClasses[photo.span]}`}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-                duration: 0.6,
-                delay: index * 0.08,
-                ease: [0.19, 1, 0.22, 1],
-            }}
-            whileHover={{ scale: 1.02 }}
-            onClick={() => {
-                playClickSound();
-                onClick();
-            }}
-            onMouseEnter={() => playHoverSound()}
-        >
-            {/* Image */}
-            <div className="relative w-full h-full min-h-[250px] md:min-h-[300px]">
-                <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-110"
-                    loading="lazy"
-                />
-
-                {/* Overlay on hover */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-500" />
-
-                {/* Top-left index badge */}
-                <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="text-[10px] font-mono font-bold tracking-[0.2em] text-[var(--color-accent)] bg-black/60 px-2 py-1 backdrop-blur-sm border border-white/10">
-                        {String(photo.id).padStart(2, "0")}
-                    </span>
-                </div>
-
-                {/* Bottom caption */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-                    <p className="text-[10px] uppercase tracking-[0.3em] text-white/80 font-mono">
-                        {photo.alt}
-                    </p>
-                </div>
-
-                {/* Corner accent lines */}
-                <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-[var(--color-accent)]/0 group-hover:border-[var(--color-accent)]/60 transition-all duration-500" />
-                <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-[var(--color-accent)]/0 group-hover:border-[var(--color-accent)]/60 transition-all duration-500" />
-            </div>
-        </motion.div>
-    );
-};
-
 export default function PhotoGallery() {
     const router = useRouter();
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const [photos] = useState<Photo[]>(PHOTOS_DATA);
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const embedContainerRef = useRef<HTMLDivElement>(null);
 
-    const openLightbox = useCallback((index: number) => {
-        setSelectedIndex(index);
+    // Load the Pinterest SDK and render the embed
+    useEffect(() => {
+        const loadPinterest = () => {
+            // Clean up any previous script
+            const existingScript = document.getElementById("pinterest-sdk");
+            if (existingScript) {
+                existingScript.remove();
+            }
+
+            // If Pinterest SDK is already loaded, just re-render
+            if ((window as any).PinUtils) {
+                (window as any).PinUtils.build();
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.id = "pinterest-sdk";
+            script.src = "https://assets.pinterest.com/js/pinit.js";
+            script.async = true;
+            script.defer = true;
+            document.body.appendChild(script);
+        };
+
+        // Small delay to ensure the embed anchor is in the DOM
+        const timer = setTimeout(loadPinterest, 100);
+        return () => clearTimeout(timer);
     }, []);
-
-    const closeLightbox = useCallback(() => {
-        setSelectedIndex(null);
-    }, []);
-
-    const goToPrev = useCallback(() => {
-        setSelectedIndex((prev) =>
-            prev !== null ? (prev - 1 + photos.length) % photos.length : null
-        );
-    }, [photos.length]);
-
-    const goToNext = useCallback(() => {
-        setSelectedIndex((prev) =>
-            prev !== null ? (prev + 1) % photos.length : null
-        );
-    }, [photos.length]);
 
     return (
         <div className="relative w-full min-h-screen bg-transparent text-white font-mono">
-            {/* Lightbox */}
-            <AnimatePresence>
-                {selectedIndex !== null && (
-                    <Lightbox
-                        photo={photos[selectedIndex]}
-                        onClose={closeLightbox}
-                        onPrev={goToPrev}
-                        onNext={goToNext}
-                    />
-                )}
-            </AnimatePresence>
-
             {/* Scroll container */}
-            <div
-                ref={scrollRef}
-                className="relative z-10 w-full max-w-6xl mx-auto px-4 py-24 md:py-28"
-            >
+            <div className="relative z-10 w-full max-w-6xl mx-auto px-4 py-24 md:py-28">
                 {/* Header */}
                 <motion.div
                     className="mb-12 flex flex-col gap-4"
@@ -299,17 +129,22 @@ export default function PhotoGallery() {
                     <div className="h-px w-full bg-gradient-to-r from-[var(--color-accent)]/50 via-white/10 to-transparent" />
                 </motion.div>
 
-                {/* Masonry Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 auto-rows-[280px]">
-                    {photos.map((photo, index) => (
-                        <PhotoCard
-                            key={photo.id}
-                            photo={photo}
-                            index={index}
-                            onClick={() => openLightbox(index)}
-                        />
-                    ))}
-                </div>
+                {/* Pinterest Board Embed */}
+                <motion.div
+                    ref={embedContainerRef}
+                    className="flex justify-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3, ease: [0.19, 1, 0.22, 1] }}
+                >
+                    <a
+                        data-pin-do="embedBoard"
+                        data-pin-board-width="900"
+                        data-pin-scale-height="800"
+                        data-pin-scale-width="115"
+                        href={PINTEREST_BOARD_URL}
+                    />
+                </motion.div>
 
                 {/* Footer */}
                 <motion.div
@@ -319,7 +154,7 @@ export default function PhotoGallery() {
                     transition={{ delay: 1, duration: 0.8 }}
                 >
                     <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">
-                        {photos.length} PHOTOS
+                        PINTEREST GALLERY
                     </p>
                     <a
                         href={PINTEREST_BOARD_URL}
