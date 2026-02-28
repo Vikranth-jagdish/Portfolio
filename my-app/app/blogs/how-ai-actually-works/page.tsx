@@ -203,7 +203,14 @@ export default function HowAIActuallyWorks() {
             <ul className="space-y-2 mb-6 ml-1">
               <li className="flex items-start gap-3 text-stone-700" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
                 <span className="px-2 py-0.5 text-xs font-mono font-bold bg-purple-100 text-purple-700 rounded mt-1 shrink-0">system</span>
-                <span>Instructions that define how the AI should behave. Set by the developer, usually invisible to the user.</span>
+                <span>
+                  The <strong>system prompt</strong> — a hidden instruction written by the developer that
+                  you never see. It defines the AI&apos;s personality, rules, and behavior. For example,
+                  ChatGPT&apos;s system prompt tells it to be helpful and harmless. A customer support bot
+                  might have a system prompt like &quot;You are a support agent for Acme Corp. Only answer
+                  questions about our products. Be polite.&quot; This is the developer&apos;s secret control
+                  layer, and it&apos;s always the very first message in the array.
+                </span>
               </li>
               <li className="flex items-start gap-3 text-stone-700" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
                 <span className="px-2 py-0.5 text-xs font-mono font-bold bg-blue-100 text-blue-700 rounded mt-1 shrink-0">user</span>
@@ -220,9 +227,9 @@ export default function HowAIActuallyWorks() {
           <section>
             <SectionHeading>Try It Yourself</SectionHeading>
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              Here&apos;s a simulated chat interface. Click through the conversation, then hit
-              <strong> &quot;Reveal&quot;</strong> to see what&apos;s <em>actually</em> being sent to the API
-              behind the scenes. Watch how the messages array grows with every exchange.
+              Here&apos;s a simulated chat interface. On the left is what you see — a normal chat.
+              On the right is what&apos;s <em>actually</em> happening — the raw JSON array being sent to the API.
+              Click &quot;Send next message&quot; and watch the array grow with every exchange.
             </p>
 
             <ChatSimulator />
