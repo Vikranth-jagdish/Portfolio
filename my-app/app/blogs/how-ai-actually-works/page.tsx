@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
@@ -34,6 +34,19 @@ function Callout({ children, type = "info" }: { children: React.ReactNode; type?
 }
 
 export default function HowAIActuallyWorks() {
+  useEffect(() => {
+    const meta = document.querySelector('meta[name="viewport"]');
+    const original = meta?.getAttribute("content") || "";
+    if (meta) {
+      meta.setAttribute("content", "width=1200");
+    }
+    return () => {
+      if (meta) {
+        meta.setAttribute("content", original);
+      }
+    };
+  }, []);
+
   return (
     <div
       className="min-h-screen w-full relative"
