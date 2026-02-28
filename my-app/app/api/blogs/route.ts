@@ -41,7 +41,22 @@ export async function GET() {
       })
       .sort((a, b) => b.modifiedAt.getTime() - a.modifiedAt.getTime());
 
-    return NextResponse.json({ blogs });
+    // Include interactive blog posts alongside .txt posts
+    const interactiveBlogs = [
+      {
+        slug: 'how-ai-actually-works',
+        title: 'How AI Actually Works: The Stateless Secret',
+        preview: 'An interactive exploration of how LLMs are stateless black boxes, and how context passing creates the illusion of memory...',
+        fileName: 'interactive',
+        createdAt: new Date('2026-02-28'),
+        modifiedAt: new Date('2026-02-28'),
+      },
+    ];
+
+    const allBlogs = [...interactiveBlogs, ...blogs]
+      .sort((a, b) => new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime());
+
+    return NextResponse.json({ blogs: allBlogs });
   } catch (error) {
     console.error('Error reading blogs:', error);
     return NextResponse.json(

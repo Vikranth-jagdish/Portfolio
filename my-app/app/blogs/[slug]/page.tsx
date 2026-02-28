@@ -30,36 +30,45 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
   );
 
   return (
-    <div className="min-h-screen w-full font-mono selection:bg-[var(--color-accent)] selection:text-black relative">
+    <div
+      className="min-h-screen w-full relative"
+      style={{
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        background: "#fafaf9",
+        color: "#1c1917",
+      }}
+    >
       {/* Navigation */}
-      <nav className="fixed top-4 left-4 right-4 z-50 mix-blend-difference flex justify-between items-center">
-        <Link
-          href="/blogs"
-          className="flex items-center gap-2 text-sm text-[var(--color-accent)] hover:opacity-80 transition-opacity uppercase"
-        >
-          <ArrowLeft size={16} />
-          Back to Blogs
-        </Link>
+      <nav className="sticky top-0 z-50 backdrop-blur-md bg-stone-50/80 border-b border-stone-200">
+        <div className="max-w-3xl mx-auto px-6 py-3 flex justify-between items-center">
+          <Link
+            href="/blogs"
+            className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 transition-colors"
+          >
+            <ArrowLeft size={16} />
+            Back to Blogs
+          </Link>
 
-        <a
-          href="https://www.linkedin.com/in/vikranth-jagdish-b37798126/"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2 text-sm text-[var(--color-accent)] hover:opacity-80 transition-opacity uppercase"
-        >
-          LinkedIn <ExternalLink size={14} />
-        </a>
+          <a
+            href="https://www.linkedin.com/in/vikranth-jagdish-b37798126/"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 transition-colors"
+          >
+            LinkedIn <ExternalLink size={14} />
+          </a>
+        </div>
       </nav>
 
-      <main className="container mx-auto px-4 py-20 max-w-4xl">
+      <main className="max-w-3xl mx-auto px-6 py-12">
         {isLoading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="text-[var(--color-accent)] text-sm uppercase tracking-widest">
+            <div className="text-stone-400 text-sm tracking-wide">
               Loading...
             </div>
           </div>
         ) : error ? (
-          <div className="text-red-400 text-sm">
+          <div className="text-red-500 text-sm">
             Failed to load blog post. Please try again later.
           </div>
         ) : data ? (
@@ -69,11 +78,14 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
             transition={{ duration: 0.5 }}
           >
             {/* Header */}
-            <header className="mb-12">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tighter text-white">
+            <header className="mb-10">
+              <h1
+                className="text-3xl md:text-5xl font-bold mb-4 tracking-tight text-stone-900"
+                style={{ fontFamily: "'Space Mono', monospace" }}
+              >
                 {data.title}
               </h1>
-              <div className="flex items-center gap-3 text-sm text-gray-400">
+              <div className="flex items-center gap-3 text-sm text-stone-400">
                 <Calendar size={16} />
                 <span>
                   {new Date(data.modifiedAt).toLocaleDateString("en-US", {
@@ -86,17 +98,20 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
             </header>
 
             {/* Content */}
-            <div className="prose prose-invert prose-pre:bg-white/5 prose-pre:border prose-pre:border-white/10 max-w-none">
-              <div className="whitespace-pre-wrap text-gray-300 leading-relaxed text-base">
+            <div className="prose prose-stone prose-lg max-w-none">
+              <div
+                className="whitespace-pre-wrap leading-relaxed text-stone-700"
+                style={{ fontSize: "1.125rem", lineHeight: "1.85" }}
+              >
                 {data.content}
               </div>
             </div>
 
             {/* Footer */}
-            <footer className="mt-12 pt-8 border-t border-white/10">
+            <footer className="mt-16 pt-8 border-t border-stone-200">
               <Link
                 href="/blogs"
-                className="inline-flex items-center gap-2 text-sm text-[var(--color-accent)] hover:opacity-80 transition-opacity uppercase"
+                className="inline-flex items-center gap-2 text-sm text-stone-500 hover:text-stone-900 transition-colors"
               >
                 <ArrowLeft size={16} />
                 Back to all blogs
@@ -104,7 +119,7 @@ export default function BlogPost({ params }: { params: Promise<{ slug: string }>
             </footer>
           </motion.article>
         ) : (
-          <div className="text-red-400 text-sm">Blog post not found.</div>
+          <div className="text-red-500 text-sm">Blog post not found.</div>
         )}
       </main>
     </div>
