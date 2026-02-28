@@ -1,11 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { GLOBAL_SOCIAL_LINKS, GLOBAL_CONFIG, PHOTOS_DATA } from "@/lib/data";
+import { GLOBAL_SOCIAL_LINKS, GLOBAL_CONFIG } from "@/lib/data";
 import { playClickSound } from "@/lib/sound-utils";
+import {
+    fetchPinterestPhotos,
+    type PinterestPin,
+} from "@/app/photos/actions";
 
 const PINTEREST_BOARD_URL =
     "https://www.pinterest.com/unbalanceddiode/my-pictures/";
@@ -57,7 +61,7 @@ function Lightbox({
     onPrev,
     onNext,
 }: {
-    photo: (typeof PHOTOS_DATA)[0];
+    photo: PinterestPin;
     onClose: () => void;
     onPrev: () => void;
     onNext: () => void;
@@ -117,13 +121,11 @@ function Lightbox({
                 transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                     src={photo.src}
                     alt={photo.alt}
-                    width={1200}
-                    height={800}
-                    className="object-contain max-h-[85vh] w-auto"
-                    priority
+                    className="object-contain max-h-[85vh] max-w-[90vw] w-auto"
                 />
                 <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/40 mt-4">
                     {photo.alt}
@@ -135,79 +137,29 @@ function Lightbox({
 
 export default function PhotoGallery() {
     const router = useRouter();
+    const [photos, setPhotos] = useState<PinterestPin[]>([]);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
-    const embedContainerRef = useRef<HTMLDivElement>(null);
-    const embedStatusRef = useRef<"loading" | "loaded" | "error">("loading");
-    const [embedStatus, setEmbedStatus] = useState<
-        "loading" | "loaded" | "error"
-    >("loading");
+    const [status, setStatus] = useState<"loading" | "loaded" | "error">(
+        "loading"
+    );
 
-    // Try loading Pinterest embed with direct DOM manipulation
+    // Fetch Pinterest photos via server action
     useEffect(() => {
-        let timeoutId: ReturnType<typeof setTimeout>;
-        let observer: MutationObserver | null = null;
+        let cancelled = false;
 
-        const loadPinterest = () => {
-            if (!embedContainerRef.current) return;
-
-            // Insert the embed anchor directly into the DOM, bypassing React's vDOM
-            embedContainerRef.current.innerHTML = `<a data-pin-do="embedBoard" data-pin-board-width="900" data-pin-scale-height="800" data-pin-scale-width="115" href="${PINTEREST_BOARD_URL}"></a>`;
-
-            // Watch for Pinterest SDK to transform the anchor into an embed
-            observer = new MutationObserver(() => {
-                const iframe =
-                    embedContainerRef.current?.querySelector("iframe");
-                const embed =
-                    embedContainerRef.current?.querySelector("[data-pin-log]");
-                if (iframe || embed) {
-                    embedStatusRef.current = "loaded";
-                    setEmbedStatus("loaded");
-                }
-            });
-            observer.observe(embedContainerRef.current, {
-                childList: true,
-                subtree: true,
-            });
-
-            // Clean up any previous script and global
-            const existingScript = document.getElementById("pinterest-sdk");
-            if (existingScript) existingScript.remove();
-            if ((window as any).PinUtils) {
-                try {
-                    (window as any).PinUtils.build();
-                    return;
-                } catch {
-                    // If build fails, reload the script
-                    delete (window as any).PinUtils;
-                }
+        fetchPinterestPhotos().then((pins) => {
+            if (cancelled) return;
+            if (pins.length > 0) {
+                setPhotos(pins);
+                setStatus("loaded");
+            } else {
+                setStatus("error");
             }
+        });
 
-            const script = document.createElement("script");
-            script.id = "pinterest-sdk";
-            script.src = "https://assets.pinterest.com/js/pinit.js";
-            script.async = true;
-            script.defer = true;
-            script.onerror = () => {
-                embedStatusRef.current = "error";
-                setEmbedStatus("error");
-            };
-            document.body.appendChild(script);
-
-            // Timeout: if embed doesn't load in 8 seconds, show fallback gallery
-            timeoutId = setTimeout(() => {
-                if (embedStatusRef.current === "loading") {
-                    embedStatusRef.current = "error";
-                    setEmbedStatus("error");
-                }
-            }, 8000);
-        };
-
-        const timer = setTimeout(loadPinterest, 200);
         return () => {
-            clearTimeout(timer);
-            clearTimeout(timeoutId);
-            if (observer) observer.disconnect();
+            cancelled = true;
         };
     }, []);
 
@@ -225,28 +177,16 @@ export default function PhotoGallery() {
     const goPrev = useCallback(() => {
         setSelectedIndex((prev) =>
             prev !== null
-                ? (prev - 1 + PHOTOS_DATA.length) % PHOTOS_DATA.length
+                ? (prev - 1 + photos.length) % photos.length
                 : null
         );
-    }, []);
+    }, [photos.length]);
 
     const goNext = useCallback(() => {
         setSelectedIndex((prev) =>
-            prev !== null ? (prev + 1) % PHOTOS_DATA.length : null
+            prev !== null ? (prev + 1) % photos.length : null
         );
-    }, []);
-
-    // Column heights for masonry layout
-    const getSpanClass = (span: string) => {
-        switch (span) {
-            case "tall":
-                return "row-span-2";
-            case "wide":
-                return "col-span-2";
-            default:
-                return "";
-        }
-    };
+    }, [photos.length]);
 
     return (
         <div className="relative w-full min-h-screen bg-transparent text-white font-mono">
@@ -297,14 +237,8 @@ export default function PhotoGallery() {
                     <div className="h-px w-full bg-gradient-to-r from-[var(--color-accent)]/50 via-white/10 to-transparent" />
                 </motion.div>
 
-                {/* Pinterest Embed (hidden container, shown only if it loads) */}
-                <div
-                    ref={embedContainerRef}
-                    className={`flex justify-center ${embedStatus === "loaded" ? "" : "hidden"}`}
-                />
-
                 {/* Loading State */}
-                {embedStatus === "loading" && (
+                {status === "loading" && (
                     <motion.div
                         className="flex flex-col items-center justify-center py-20 gap-4"
                         initial={{ opacity: 0 }}
@@ -330,8 +264,32 @@ export default function PhotoGallery() {
                     </motion.div>
                 )}
 
-                {/* Fallback Masonry Gallery (shown when Pinterest embed fails) */}
-                {embedStatus === "error" && (
+                {/* Error State */}
+                {status === "error" && (
+                    <motion.div
+                        className="flex flex-col items-center justify-center py-20 gap-6"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">
+                            Could not load photos
+                        </p>
+                        <a
+                            href={PINTEREST_BOARD_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[var(--color-accent)] text-[10px] uppercase tracking-[0.2em] font-bold transition-all group"
+                        >
+                            <span>VIEW ON PINTEREST DIRECTLY</span>
+                            <span className="text-[var(--color-accent)] group-hover:translate-x-1 transition-transform">
+                                &rarr;
+                            </span>
+                        </a>
+                    </motion.div>
+                )}
+
+                {/* Masonry Gallery */}
+                {status === "loaded" && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -340,9 +298,8 @@ export default function PhotoGallery() {
                             ease: [0.19, 1, 0.22, 1],
                         }}
                     >
-                        {/* Masonry Grid */}
                         <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-                            {PHOTOS_DATA.map((photo, index) => (
+                            {photos.map((photo, index) => (
                                 <motion.div
                                     key={photo.id}
                                     className="break-inside-avoid relative group cursor-pointer overflow-hidden"
@@ -350,30 +307,26 @@ export default function PhotoGallery() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{
                                         duration: 0.6,
-                                        delay: index * 0.08,
+                                        delay: index * 0.05,
                                         ease: [0.19, 1, 0.22, 1],
                                     }}
                                     onClick={() => openLightbox(index)}
                                 >
                                     {/* Skeleton loader */}
                                     {!loadedImages.has(photo.id) && (
-                                        <div className="absolute inset-0 bg-white/5 animate-pulse" />
+                                        <div className="absolute inset-0 bg-white/5 animate-pulse min-h-[200px]" />
                                     )}
 
-                                    <Image
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
                                         src={photo.src}
                                         alt={photo.alt}
-                                        width={
-                                            photo.span === "wide" ? 800 : 400
-                                        }
-                                        height={
-                                            photo.span === "tall" ? 600 : 300
-                                        }
                                         className={`w-full object-cover transition-all duration-500 group-hover:scale-105 ${
                                             loadedImages.has(photo.id)
                                                 ? "opacity-100"
                                                 : "opacity-0"
                                         }`}
+                                        loading={index < 6 ? "eager" : "lazy"}
                                         onLoad={() =>
                                             handleImageLoad(photo.id)
                                         }
@@ -426,7 +379,7 @@ export default function PhotoGallery() {
             <AnimatePresence>
                 {selectedIndex !== null && (
                     <Lightbox
-                        photo={PHOTOS_DATA[selectedIndex]}
+                        photo={photos[selectedIndex]}
                         onClose={closeLightbox}
                         onPrev={goPrev}
                         onNext={goNext}
