@@ -1,9 +1,15 @@
 "use client"
 
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import SpotifyCard from "./ui/spotify-card";
 
 export function GlobalSpotifyCard() {
+    const pathname = usePathname();
+
+    // Hide on all blog pages
+    if (pathname.startsWith("/blogs/")) return null;
+
     return (
         <motion.div
             drag
