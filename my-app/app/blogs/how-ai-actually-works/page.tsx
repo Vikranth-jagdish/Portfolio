@@ -317,50 +317,32 @@ export default function HowAIActuallyWorks() {
             </p>
           </section>
 
-          {/* ─── Section 7: What This Means For You ─── */}
+          {/* ─── Section 7: Context Windows & RAG ─── */}
           <section>
-            <SectionHeading>What This Means For You</SectionHeading>
+            <SectionHeading>Why Context is &quot;Engineered&quot;</SectionHeading>
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              Understanding this architecture changes how you interact with AI:
+              Since the entire conversation is passed to the model every single time, the payload
+              keeps growing. Eventually, the AI hits its <strong>context window</strong> — the maximum
+              number of tokens (words/pieces of words) it can process in a single request. Once you
+              hit that limit, no more input messages can be passed. The conversation is effectively over.
             </p>
-            <ul className="space-y-3 mb-6 text-stone-700" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              <li className="flex items-start gap-3">
-                <span className="text-lg mt-0.5">1.</span>
-                <span>
-                  <strong>Be specific early.</strong> The system prompt and first few messages set the
-                  tone for the entire conversation. They&apos;re re-sent every time, so they have
-                  outsized influence.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-lg mt-0.5">2.</span>
-                <span>
-                  <strong>Start fresh when switching topics.</strong> A new chat means a clean context.
-                  Old, irrelevant messages won&apos;t confuse the model or waste tokens.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-lg mt-0.5">3.</span>
-                <span>
-                  <strong>Long conversations degrade.</strong> As the context fills up, the model has
-                  more to process and older information carries less weight. Keep important instructions
-                  near the start.
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-lg mt-0.5">4.</span>
-                <span>
-                  <strong>If you&apos;re building with AI APIs</strong>, you control the messages array
-                  directly. You decide what context to include, what to summarize, and when to drop
-                  old messages. This is where the real power is.
-                </span>
-              </li>
-            </ul>
+            <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
+              This is exactly why context is <strong>&quot;engineered&quot;</strong>. Developers don&apos;t
+              just blindly dump everything into the messages array — they carefully choose what to include
+              and what to leave out, so the model gets the most relevant information within its token budget.
+            </p>
+            <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
+              This is also why <strong>RAG (Retrieval-Augmented Generation)</strong> architectures exist.
+              Instead of stuffing the entire history or an entire knowledge base into the prompt, RAG
+              systems <em>retrieve</em> only the most relevant pieces of information and inject them into
+              the messages array right before sending. The model gets exactly what it needs — nothing more,
+              nothing less.
+            </p>
 
             <Callout type="info">
-              Now you know the secret. Next time you chat with an AI and it &quot;remembers&quot;
-              something from earlier, you&apos;ll know what&apos;s really happening: your entire
-              conversation history is being replayed, every single time.
+              The context window is a hard ceiling. Every AI application has to decide what to pass
+              to the model and what to drop. That decision — what context to include — is where the
+              real engineering happens.
             </Callout>
           </section>
 
