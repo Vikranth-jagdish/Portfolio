@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, RotateCcw, ArrowRight } from "lucide-react";
 
@@ -43,20 +43,9 @@ export default function ChatSimulator() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isTyping, setIsTyping] = useState(false);
   const [prevMessageCount, setPrevMessageCount] = useState(0);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-  const jsonEndRef = useRef<HTMLDivElement>(null);
-
   const displayMessages = visibleMessages.filter((m) => m.role !== "system");
   const apiPayload = visibleMessages;
   const isConversationDone = currentStep >= CONVERSATION_STEPS.length;
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [visibleMessages, isTyping]);
-
-  useEffect(() => {
-    jsonEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [visibleMessages]);
 
   function sendNextMessage() {
     if (isTyping || isConversationDone) return;
@@ -184,7 +173,6 @@ export default function ChatSimulator() {
                 </div>
               </div>
             )}
-            <div ref={chatEndRef} />
           </div>
 
           {/* Send button */}
@@ -280,7 +268,6 @@ export default function ChatSimulator() {
                 <span className="text-stone-500">{"}"}</span>
               </pre>
             )}
-            <div ref={jsonEndRef} />
           </div>
 
           {/* Footer with explicit message */}
