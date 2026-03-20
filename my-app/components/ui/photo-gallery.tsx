@@ -1,22 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { GLOBAL_SOCIAL_LINKS, GLOBAL_CONFIG } from "@/lib/data";
 import { playClickSound } from "@/lib/sound-utils";
-import {
-    fetchPinterestPhotos,
-    type PinterestPin,
-} from "@/app/photos/actions";
 
 const PINTEREST_BOARD_URL =
-    "https://www.pinterest.com/unbalanceddiode/my-pictures/";
+    "https://in.pinterest.com/unbalanceddiode/my-pictures/";
 
 // Time Display (matching portfolio style)
 const TimeDisplay = ({ CONFIG = {} }: any) => {
-    const [time, setTime] = useState({ hours: "", minutes: "", dayPeriod: "" });
+    const [time, setTime] = React.useState({ hours: "", minutes: "", dayPeriod: "" });
 
     useEffect(() => {
         const updateTime = () => {
@@ -54,139 +49,36 @@ const TimeDisplay = ({ CONFIG = {} }: any) => {
     );
 };
 
-// Lightbox component for viewing photos full-size
-function Lightbox({
-    photo,
-    onClose,
-    onPrev,
-    onNext,
-}: {
-    photo: PinterestPin;
-    onClose: () => void;
-    onPrev: () => void;
-    onNext: () => void;
-}) {
-    useEffect(() => {
-        const handleKey = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
-            if (e.key === "ArrowLeft") onPrev();
-            if (e.key === "ArrowRight") onNext();
-        };
-        window.addEventListener("keydown", handleKey);
-        return () => window.removeEventListener("keydown", handleKey);
-    }, [onClose, onPrev, onNext]);
-
-    return (
-        <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-        >
-            {/* Close button */}
-            <button
-                onClick={onClose}
-                className="absolute top-6 right-6 text-white/60 hover:text-white text-xs uppercase tracking-[0.2em] font-bold z-10 transition-colors"
-            >
-                CLOSE [ESC]
-            </button>
-
-            {/* Nav buttons */}
-            <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onPrev();
-                }}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-white/40 hover:text-white text-2xl z-10 transition-colors p-4"
-            >
-                &larr;
-            </button>
-            <button
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onNext();
-                }}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 text-white/40 hover:text-white text-2xl z-10 transition-colors p-4"
-            >
-                &rarr;
-            </button>
-
-            {/* Image */}
-            <motion.div
-                className="relative max-w-[90vw] max-h-[85vh] w-auto h-auto"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    className="object-contain max-h-[85vh] max-w-[90vw] w-auto"
-                />
-                <p className="text-center text-[10px] uppercase tracking-[0.3em] text-white/40 mt-4">
-                    {photo.alt}
-                </p>
-            </motion.div>
-        </motion.div>
-    );
-}
-
 export default function PhotoGallery() {
     const router = useRouter();
-    const [photos, setPhotos] = useState<PinterestPin[]>([]);
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
-    const [status, setStatus] = useState<"loading" | "loaded" | "error">(
-        "loading"
-    );
+    const boardRef = useRef<HTMLDivElement>(null);
 
-    // Fetch Pinterest photos via server action
+    // Load Pinterest SDK and render the embed widget
     useEffect(() => {
-        let cancelled = false;
+        // Clean up any existing Pinterest script to force re-render
+        const existingScript = document.querySelector('script[src="https://assets.pinterest.com/js/pinit.js"]');
+        if (existingScript) {
+            existingScript.remove();
+        }
 
-        fetchPinterestPhotos().then((pins) => {
-            if (cancelled) return;
-            if (pins.length > 0) {
-                setPhotos(pins);
-                setStatus("loaded");
-            } else {
-                setStatus("error");
-            }
-        });
+        // Clear any Pinterest global state so re-render works
+        if ((window as any).PinUtils) {
+            delete (window as any).PinUtils;
+        }
+        if ((window as any).PIN_) {
+            delete (window as any).PIN_;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://assets.pinterest.com/js/pinit.js";
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
 
         return () => {
-            cancelled = true;
+            script.remove();
         };
     }, []);
-
-    const handleImageLoad = useCallback((id: number) => {
-        setLoadedImages((prev) => new Set(prev).add(id));
-    }, []);
-
-    const openLightbox = useCallback((index: number) => {
-        playClickSound();
-        setSelectedIndex(index);
-    }, []);
-
-    const closeLightbox = useCallback(() => setSelectedIndex(null), []);
-
-    const goPrev = useCallback(() => {
-        setSelectedIndex((prev) =>
-            prev !== null
-                ? (prev - 1 + photos.length) % photos.length
-                : null
-        );
-    }, [photos.length]);
-
-    const goNext = useCallback(() => {
-        setSelectedIndex((prev) =>
-            prev !== null ? (prev + 1) % photos.length : null
-        );
-    }, [photos.length]);
 
     return (
         <div className="relative w-full min-h-screen bg-transparent text-white font-mono">
@@ -237,122 +129,26 @@ export default function PhotoGallery() {
                     <div className="h-px w-full bg-gradient-to-r from-[var(--color-accent)]/50 via-white/10 to-transparent" />
                 </motion.div>
 
-                {/* Loading State */}
-                {status === "loading" && (
-                    <motion.div
-                        className="flex flex-col items-center justify-center py-20 gap-4"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                    >
-                        <div className="flex gap-1">
-                            {[0, 1, 2].map((i) => (
-                                <motion.div
-                                    key={i}
-                                    className="w-2 h-2 bg-[var(--color-accent)]"
-                                    animate={{ opacity: [0.3, 1, 0.3] }}
-                                    transition={{
-                                        duration: 1.2,
-                                        repeat: Infinity,
-                                        delay: i * 0.2,
-                                    }}
-                                />
-                            ))}
-                        </div>
-                        <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">
-                            Loading Pinterest board...
-                        </p>
-                    </motion.div>
-                )}
-
-                {/* Error State */}
-                {status === "error" && (
-                    <motion.div
-                        className="flex flex-col items-center justify-center py-20 gap-6"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                    >
-                        <p className="text-[10px] uppercase tracking-[0.3em] text-white/40">
-                            Could not load photos
-                        </p>
-                        <a
-                            href={PINTEREST_BOARD_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[var(--color-accent)] text-[10px] uppercase tracking-[0.2em] font-bold transition-all group"
-                        >
-                            <span>VIEW ON PINTEREST DIRECTLY</span>
-                            <span className="text-[var(--color-accent)] group-hover:translate-x-1 transition-transform">
-                                &rarr;
-                            </span>
-                        </a>
-                    </motion.div>
-                )}
-
-                {/* Masonry Gallery */}
-                {status === "loaded" && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                            duration: 0.8,
-                            ease: [0.19, 1, 0.22, 1],
-                        }}
-                    >
-                        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
-                            {photos.map((photo, index) => (
-                                <motion.div
-                                    key={photo.id}
-                                    className="break-inside-avoid relative group cursor-pointer overflow-hidden"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{
-                                        duration: 0.6,
-                                        delay: index * 0.05,
-                                        ease: [0.19, 1, 0.22, 1],
-                                    }}
-                                    onClick={() => openLightbox(index)}
-                                >
-                                    {/* Skeleton loader */}
-                                    {!loadedImages.has(photo.id) && (
-                                        <div className="absolute inset-0 bg-white/5 animate-pulse min-h-[200px]" />
-                                    )}
-
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={photo.src}
-                                        alt={photo.alt}
-                                        className={`w-full object-cover transition-all duration-500 group-hover:scale-105 ${
-                                            loadedImages.has(photo.id)
-                                                ? "opacity-100"
-                                                : "opacity-0"
-                                        }`}
-                                        loading={index < 6 ? "eager" : "lazy"}
-                                        onLoad={() =>
-                                            handleImageLoad(photo.id)
-                                        }
-                                    />
-
-                                    {/* Hover overlay */}
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-end">
-                                        <div className="p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                            <p className="text-[10px] uppercase tracking-[0.3em] text-white/80">
-                                                {photo.alt}
-                                            </p>
-                                            <div className="w-8 h-px bg-[var(--color-accent)] mt-2" />
-                                        </div>
-                                    </div>
-
-                                    {/* Index badge */}
-                                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <span className="text-[9px] font-bold text-white/60 bg-black/50 px-2 py-1">
-                                            {String(index + 1).padStart(2, "0")}
-                                        </span>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
+                {/* Pinterest Board Embed */}
+                <motion.div
+                    ref={boardRef}
+                    className="flex justify-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                        duration: 0.8,
+                        delay: 0.2,
+                        ease: [0.19, 1, 0.22, 1],
+                    }}
+                >
+                    <a
+                        data-pin-do="embedBoard"
+                        data-pin-board-width="400"
+                        data-pin-scale-height="240"
+                        data-pin-scale-width="80"
+                        href={PINTEREST_BOARD_URL}
+                    />
+                </motion.div>
 
                 {/* Footer */}
                 <motion.div
@@ -374,18 +170,6 @@ export default function PhotoGallery() {
                     </a>
                 </motion.div>
             </div>
-
-            {/* Lightbox */}
-            <AnimatePresence>
-                {selectedIndex !== null && (
-                    <Lightbox
-                        photo={photos[selectedIndex]}
-                        onClose={closeLightbox}
-                        onPrev={goPrev}
-                        onNext={goNext}
-                    />
-                )}
-            </AnimatePresence>
 
             {/* Corner elements (matching portfolio layout) */}
             <aside className="fixed inset-0 pointer-events-none p-6 z-50">
