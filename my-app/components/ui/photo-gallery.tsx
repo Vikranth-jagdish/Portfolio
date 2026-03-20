@@ -143,9 +143,9 @@ export default function PhotoGallery() {
                 >
                     <a
                         data-pin-do="embedBoard"
-                        data-pin-board-width="400"
-                        data-pin-scale-height="240"
-                        data-pin-scale-width="80"
+                        data-pin-board-width="900"
+                        data-pin-scale-height="500"
+                        data-pin-scale-width="115"
                         href={PINTEREST_BOARD_URL}
                     />
                 </motion.div>
