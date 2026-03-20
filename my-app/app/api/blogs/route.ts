@@ -41,19 +41,39 @@ export async function GET() {
       })
       .sort((a, b) => b.modifiedAt.getTime() - a.modifiedAt.getTime());
 
-    // Include interactive blog posts alongside .txt posts
-    const interactiveBlogs = [
+    // Include dedicated blog posts (custom React pages) alongside .txt posts
+    const dedicatedBlogs = [
       {
         slug: 'how-ai-actually-works',
         title: 'How AI Actually Works: The Stateless Secret',
         preview: 'An interactive exploration of how LLMs are stateless black boxes, and how context passing creates the illusion of memory...',
         fileName: 'interactive',
-        createdAt: new Date('2026-02-28'),
-        modifiedAt: new Date('2026-02-28'),
+        createdAt: new Date('2025-02-28'),
+        modifiedAt: new Date('2025-02-28'),
+      },
+      {
+        slug: 'agentic-graph-rag',
+        title: 'Agentic Graph RAG: The Future of Knowledge Retrieval',
+        preview: 'What happens when you combine graph-based knowledge with autonomous AI agents? A deep dive into the architecture that reasons its way to answers...',
+        fileName: 'dedicated',
+        createdAt: new Date('2025-01-15'),
+        modifiedAt: new Date('2025-01-15'),
+      },
+      {
+        slug: 'livekit-voice',
+        title: 'Building Real-time Voice Applications with LiveKit',
+        preview: 'From telehealth to online education — how LiveKit makes real-time voice accessible, scalable, and production-ready...',
+        fileName: 'dedicated',
+        createdAt: new Date('2025-03-10'),
+        modifiedAt: new Date('2025-03-10'),
       },
     ];
 
-    const allBlogs = [...interactiveBlogs, ...blogs]
+    // Filter out .txt blogs that now have dedicated pages
+    const dedicatedSlugs = dedicatedBlogs.map(b => b.slug);
+    const filteredTxtBlogs = blogs.filter(b => !dedicatedSlugs.includes(b.slug));
+
+    const allBlogs = [...dedicatedBlogs, ...filteredTxtBlogs]
       .sort((a, b) => new Date(b.modifiedAt).getTime() - new Date(a.modifiedAt).getTime());
 
     return NextResponse.json({ blogs: allBlogs });
