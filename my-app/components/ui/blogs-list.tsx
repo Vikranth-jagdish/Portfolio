@@ -12,7 +12,6 @@ interface Blog {
   slug: string;
   title: string;
   preview: string;
-  fileName: string;
   createdAt: string;
   modifiedAt: string;
 }
@@ -41,7 +40,7 @@ export default function BlogsList() {
   if (blogs.length === 0) {
     return (
       <div className="text-gray-500 text-sm">
-        No blogs found. Add .txt files to the /blogs directory.
+        No blogs found.
       </div>
     );
   }

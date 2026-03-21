@@ -10,9 +10,9 @@ export const ROOT_CATEGORIES = [
     {
         id: "projects",
         artist: "PROJECTS",
-        album: "THE WORK",
-        category: "SELECT WORKS",
-        label: "2024",
+        album: "SELECT WORKS",
+        category: "ENGINEERING",
+        label: "4 PROJECTS",
         year: "->",
         image: "",
         action: "/projects"
@@ -20,9 +20,9 @@ export const ROOT_CATEGORIES = [
     {
         id: "experience",
         artist: "EXPERIENCE",
-        album: "THE JOURNEY",
-        category: "CAREER",
-        label: "2020-24",
+        album: "CAREER PATH",
+        category: "PROFESSIONAL",
+        label: "5 ROLES",
         year: "->",
         image: "",
         action: "/experience"
@@ -30,8 +30,8 @@ export const ROOT_CATEGORIES = [
     {
         id: "videos",
         artist: "VIDEOS",
-        album: "VISUALS",
-        category: "MEDIA",
+        album: "VISUAL MEDIA",
+        category: "CONTENT",
         label: "YOUTUBE",
         year: "->",
         image: "",
@@ -42,7 +42,7 @@ export const ROOT_CATEGORIES = [
         artist: "LABS",
         album: "EXPERIMENTS",
         category: "R&D",
-        label: "CODE",
+        label: "EXPLORE",
         year: "->",
         image: "",
         action: "/labs"
@@ -50,8 +50,8 @@ export const ROOT_CATEGORIES = [
     {
         id: "stats",
         artist: "STATS",
-        album: "METRICS",
-        category: "DATA",
+        album: "LIVE METRICS",
+        category: "DASHBOARD",
         label: "LIVE",
         year: "->",
         image: "",
@@ -61,8 +61,8 @@ export const ROOT_CATEGORIES = [
         id: "photos",
         artist: "PHOTOS",
         album: "GALLERY",
-        category: "PINTEREST",
-        label: "CLICKS",
+        category: "PHOTOGRAPHY",
+        label: "PINTEREST",
         year: "->",
         image: "",
         action: "/photos"
@@ -70,8 +70,8 @@ export const ROOT_CATEGORIES = [
     {
         id: "blogs",
         artist: "BLOGS",
-        album: "WRITINGS",
-        category: "ARTICLES",
+        album: "ARTICLES",
+        category: "WRITING",
         label: "NEW",
         year: "->",
         image: "",
