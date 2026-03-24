@@ -7,7 +7,7 @@ export async function GET() {
     const dedicatedBlogs = [
       {
         slug: 'how-ai-actually-works',
-        title: 'How AI Actually Works: The Stateless Secret',
+        title: 'How AI Actually Works: Why It Has No Memory',
         preview: 'An interactive exploration of how LLMs are stateless black boxes, and how context passing creates the illusion of memory...',
         createdAt: new Date('2025-02-28'),
         modifiedAt: new Date('2025-02-28'),

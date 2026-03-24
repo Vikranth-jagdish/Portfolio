@@ -96,7 +96,7 @@ export default function HowAIActuallyWorks() {
               style={{ fontFamily: "'Space Mono', monospace", lineHeight: 1.1 }}
             >
               How AI Actually Works:<br />
-              <span className="text-stone-500">The Stateless Secret</span>
+              <span className="text-stone-500">Why It Has No Memory</span>
             </h1>
             <p className="text-lg text-stone-500 leading-relaxed">
               You&apos;ve chatted with ChatGPT, Claude, or Gemini. It feels like they remember
