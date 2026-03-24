@@ -176,38 +176,38 @@ export default function AgenticGraphRAG() {
 
           {/* ─── Section 3: Why Graphs ─── */}
           <section>
-            <SectionHeading>Why Graphs Beat Vectors</SectionHeading>
+            <SectionHeading>Two Stores, One Agent</SectionHeading>
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              Vector embeddings are great at finding <em>similar</em> content. But similarity isn&apos;t
-              the same as relevance. When information is structured as a graph, you unlock capabilities
-              that flat retrieval simply can&apos;t match.
+              The key insight behind Agentic Graph RAG is that it doesn&apos;t replace vector search with
+              graph search &mdash; it uses <strong>both</strong>. The system has access to a vector database
+              and a graph database, and an AI agent decides which one to pull from at each step.
             </p>
 
             <div className="my-8 bg-stone-900 rounded-2xl p-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-amber-400 font-bold text-sm uppercase tracking-wider mb-3">Vector Search</h4>
+                  <h4 className="text-amber-400 font-bold text-sm uppercase tracking-wider mb-3">Vector DB</h4>
                   <ul className="space-y-2 text-stone-300 text-sm">
                     <li className="flex items-start gap-2">
-                      <span className="text-red-400 shrink-0">&#x2717;</span>
-                      <span>Flattens hierarchical information</span>
+                      <span className="text-amber-400 shrink-0">&#x2713;</span>
+                      <span>Fast semantic similarity search</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-red-400 shrink-0">&#x2717;</span>
+                      <span className="text-amber-400 shrink-0">&#x2713;</span>
+                      <span>Great for broad, fuzzy queries</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-amber-400 shrink-0">&#x2717;</span>
                       <span>Misses non-obvious connections</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-red-400 shrink-0">&#x2717;</span>
-                      <span>Fixed retrieval strategy</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-red-400 shrink-0">&#x2717;</span>
+                      <span className="text-amber-400 shrink-0">&#x2717;</span>
                       <span>Single-hop lookups only</span>
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="text-emerald-400 font-bold text-sm uppercase tracking-wider mb-3">Graph RAG</h4>
+                  <h4 className="text-emerald-400 font-bold text-sm uppercase tracking-wider mb-3">Graph DB</h4>
                   <ul className="space-y-2 text-stone-300 text-sm">
                     <li className="flex items-start gap-2">
                       <span className="text-emerald-400 shrink-0">&#x2713;</span>
@@ -219,11 +219,11 @@ export default function AgenticGraphRAG() {
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-emerald-400 shrink-0">&#x2713;</span>
-                      <span>Dynamic, context-aware exploration</span>
+                      <span>Discovers indirect connections</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-emerald-400 shrink-0">&#x2713;</span>
-                      <span>Discovers indirect connections</span>
+                      <span>Structured, explainable traversals</span>
                     </li>
                   </ul>
                 </div>
@@ -231,10 +231,10 @@ export default function AgenticGraphRAG() {
             </div>
 
             <Callout type="insight">
-              <strong>Multi-hop reasoning</strong> is the killer feature. A graph lets the system follow
-              edges from one entity to another, discovering relevant information that no similarity search
-              would ever surface. Think of it like browsing Wikipedia &mdash; you start at one article and
-              follow links to discover connected knowledge.
+              <strong>The agent is the orchestrator.</strong> It might start by pulling from the vector DB
+              for a quick semantic match, evaluate the results, decide it doesn&apos;t have enough context,
+              and then traverse the graph DB for deeper relational data &mdash; all in a multi-turn loop.
+              Neither store alone is sufficient; the power comes from the agent dynamically choosing between them.
             </Callout>
           </section>
 
@@ -242,21 +242,23 @@ export default function AgenticGraphRAG() {
           <section>
             <SectionHeading>The Agentic Layer</SectionHeading>
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              What makes this architecture truly powerful is the <strong>agentic component</strong>. Instead
-              of a fixed retrieval pipeline where you always run the same query against the same index, an
-              agentic system can think about <em>how</em> to retrieve.
+              What makes this architecture truly powerful is the <strong>agentic component</strong>. The agent
+              sits on top of both the vector DB and the graph DB, and at each turn it decides which store
+              to query, evaluates what it got back, and decides whether it needs more. This multi-turn
+              retrieval loop is what separates it from a fixed pipeline.
             </p>
 
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              An AI agent sitting on top of a knowledge graph can:
+              In practice, the agent:
             </p>
 
             <div className="my-6 space-y-3">
               {[
-                { label: "Plan", desc: "Break down a complex query into sub-questions and determine the best traversal path through the graph" },
-                { label: "Adapt", desc: "Adjust its retrieval strategy based on what it finds. If one path is a dead end, try another" },
-                { label: "Reason", desc: "Evaluate which nodes are actually relevant and which are noise, pruning unnecessary branches" },
-                { label: "Synthesize", desc: "Combine information from multiple graph traversals into a coherent, complete answer" },
+                { label: "Plan", desc: "Break down a complex query into sub-questions and decide whether to start with the vector DB, graph DB, or both" },
+                { label: "Retrieve", desc: "Pull initial results from the vector DB for a fast semantic match on the query" },
+                { label: "Evaluate", desc: "Assess whether the retrieved context is sufficient. If not, go back for more — maybe from the graph DB this time" },
+                { label: "Traverse", desc: "Follow relationships in the graph DB to find connected entities and deeper context the vector search missed" },
+                { label: "Synthesize", desc: "Combine information gathered across multiple turns from both stores into a coherent, complete answer" },
               ].map(({ label, desc }) => (
                 <div key={label} className="flex items-start gap-4 bg-stone-50 border border-stone-200 rounded-lg p-4">
                   <span className="px-2 py-0.5 text-xs font-mono font-bold bg-stone-200 text-stone-700 rounded mt-0.5 shrink-0">
@@ -272,8 +274,8 @@ export default function AgenticGraphRAG() {
           <section>
             <SectionHeading>How to Build One</SectionHeading>
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              Building an Agentic Graph RAG system involves three core components working together.
-              Each one is a deep topic on its own, but here&apos;s the high-level architecture.
+              Building an Agentic Graph RAG system involves setting up two retrieval stores and an
+              agent that orchestrates between them. Here&apos;s the high-level architecture.
             </p>
 
             <div className="my-8 bg-stone-100 rounded-xl p-6">
@@ -283,15 +285,16 @@ export default function AgenticGraphRAG() {
       ▼
 ┌─────────────┐
 │  AI Agent   │  ← Plans retrieval strategy
-│  (Reasoner) │  ← Decomposes complex queries
+│  (Reasoner) │  ← Chooses which store to query
 └──────┬──────┘
        │
-       ▼
-┌─────────────┐
-│  Knowledge  │  ← Entities, relationships,
-│    Graph    │  ← properties, metadata
-└──────┬──────┘
-       │
+   ┌───┴───┐        Multi-turn loop:
+   ▼       ▼        Agent retrieves, evaluates,
+┌──────┐ ┌──────┐   and decides if it needs more
+│Vector│ │Graph │
+│  DB  │ │  DB  │
+└──┬───┘ └───┬──┘
+   └───┬─────┘
        ▼
 ┌─────────────┐
 │    LLM      │  ← Synthesizes retrieved
@@ -301,12 +304,11 @@ export default function AgenticGraphRAG() {
             </div>
 
             <ConceptCard
-              title="1. Knowledge Graph Construction"
+              title="1. Dual Retrieval Stores"
               items={[
-                "Extract entities and relationships from your data sources (documents, databases, APIs)",
-                "Design a graph schema that models your domain — what are the node types and edge types?",
-                "Store in a graph database like Neo4j, Amazon Neptune, or even a lightweight in-memory graph",
-                "Index nodes with vector embeddings for hybrid search (combine graph traversal with semantic similarity)",
+                "Vector DB — embed your documents and chunks for fast semantic similarity search (e.g. Pinecone, Weaviate, pgvector)",
+                "Graph DB — extract entities and relationships from your data, store in Neo4j, Amazon Neptune, or similar",
+                "Both stores index the same underlying knowledge but expose it differently — one by meaning, the other by structure",
               ]}
             />
 
@@ -314,8 +316,8 @@ export default function AgenticGraphRAG() {
               title="2. Agentic Reasoning Engine"
               items={[
                 "Query understanding — parse what the user is actually asking and identify required entity types",
-                "Path planning — determine which nodes to start from and which edges to follow",
-                "Iterative exploration — traverse the graph, evaluate relevance at each step, backtrack if needed",
+                "Source selection — decide whether to hit the vector DB, graph DB, or both for this turn",
+                "Iterative retrieval — pull results, evaluate if the context is sufficient, and loop back for more if needed",
                 "Termination logic — know when you have enough information to generate a complete answer",
               ]}
             />
@@ -413,10 +415,6 @@ export default function AgenticGraphRAG() {
             </p>
 
             <ul className="space-y-2 mb-6 text-stone-700 list-disc pl-5" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
-              <li>
-                <strong>Hybrid retrieval</strong> &mdash; combining vector similarity with graph traversal
-                in a single query, getting the best of both worlds
-              </li>
               <li>
                 <strong>Learned graph navigation</strong> &mdash; using ML models to predict the most
                 promising paths through the graph, reducing unnecessary exploration

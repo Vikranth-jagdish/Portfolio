@@ -135,7 +135,7 @@ export default function LiveKitVoice() {
             <SectionHeading>Why Not Just Use WebRTC Directly?</SectionHeading>
             <p className="text-stone-700 leading-relaxed mb-4" style={{ fontSize: "1.125rem", lineHeight: 1.85 }}>
               You <em>could</em> build on raw WebRTC. But you&apos;d spend months dealing with
-              STUN/TURN servers, codec negotiation, bandwidth estimation, oonnection state machines,
+              STUN/TURN servers, codec negotiation, bandwidth estimation, connection state machines,
               and the dozens of browser-specific quirks that make WebRTC notoriously hard to ship.
             </p>
 
