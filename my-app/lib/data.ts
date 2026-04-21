@@ -216,16 +216,6 @@ export const VIDEOS_DATA = [
         year: "2024",
         image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2574&auto=format&fit=crop",
         videoSrc: "/videos/FE!N (VALORANT EDIT)_1 logo edning.mp4"
-    },
-    {
-        id: 2,
-        artist: "TUTORIAL",
-        album: "REACT GSAP",
-        category: "GUIDE",
-        label: "4K",
-        year: "2023",
-        image: "https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=2574&auto=format&fit=crop",
-        videoSrc: "/videos/FE!N (VALORANT EDIT)_1 logo edning.mp4"
     }
 ];
 
