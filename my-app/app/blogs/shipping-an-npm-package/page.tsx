@@ -27,22 +27,9 @@ function P({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Callout({
-  children,
-  type = "info",
-}: {
-  children: React.ReactNode;
-  type?: "info" | "warning" | "insight";
-}) {
-  const styles = {
-    info: "bg-blue-50 border-blue-200 text-blue-900",
-    warning: "bg-amber-50 border-amber-200 text-amber-900",
-    insight: "bg-emerald-50 border-emerald-200 text-emerald-900",
-  };
+function Note({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className={`my-6 px-5 py-4 rounded-xl border ${styles[type]} text-sm leading-relaxed`}
-    >
+    <div className="my-6 px-5 py-4 rounded-xl border bg-amber-50 border-amber-200 text-amber-900 text-sm leading-relaxed">
       {children}
     </div>
   );
@@ -88,248 +75,223 @@ export default function ShippingAnNpmPackage() {
           <header className="mb-12">
             <div className="flex items-center gap-2 mb-4">
               <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-100 text-amber-700 rounded-full">
-                Story · Lessons
+                Story
               </span>
-              <span className="text-xs text-stone-400">11 min read</span>
+              <span className="text-xs text-stone-400">10 min read</span>
             </div>
             <h1
               className="text-3xl md:text-5xl font-bold tracking-tight text-stone-900 mb-4"
               style={{ fontFamily: "'Space Mono', monospace", lineHeight: 1.1 }}
             >
-              I shipped a tiny tool.
+              Shipping a tiny tool was
               <br />
-              <span className="text-stone-500">
-                It taught me more than the code.
-              </span>
+              <span className="text-stone-500">harder than building it</span>
             </h1>
             <p className="text-lg text-stone-500 leading-relaxed">
-              The honest, jargon-free story of building and publishing a small
-              developer tool with an AI sitting next to me — including the
-              two-day bug that had nothing to do with the code, and why my own
-              computer physically couldn&apos;t ship it.
+              I built a small thing in an afternoon and then spent two days
+              trying to get it online. Most of that time had nothing to do with
+              the code. Here is what actually happened, in plain words.
             </p>
           </header>
 
           <section>
-            <SectionHeading>What I was building</SectionHeading>
+            <SectionHeading>What I built</SectionHeading>
             <P>
-              My college has a student portal called VTOP — attendance, marks,
-              timetable, exam seats, all of it. I wanted to just{" "}
-              <em>ask</em> for that info in plain English instead of clicking
-              through pages. So I built a small program that knows how to log
-              into VTOP and read those pages, and exposes it in a way that AI
-              assistants (Claude, Cursor, VS Code) can use as a tool.
+              My college has a portal called VTOP. Attendance, marks,
+              timetable, exam seats, all of it lives there behind a few clicks.
+              I wanted to just ask for that stuff in normal language instead of
+              navigating pages, so I wrote a small program that logs into VTOP
+              and reads those pages for you. It plugs into AI assistants like
+              Claude and Cursor as a tool they can call.
             </P>
             <P>
-              The plan was to put it online so anyone at my college could
-              install it with one command. That last part — &quot;put it
-              online&quot; — is where the real story is. The code was the easy
-              bit. Shipping it taught me everything.
+              Writing it was the quick part. The slow part was publishing it so
+              anyone at my college could install it with one command. That is
+              the part worth writing about.
             </P>
           </section>
 
           <section>
             <SectionHeading>It felt like working with a person</SectionHeading>
             <P>
-              I did this with an AI assistant the whole way. What struck me
-              wasn&apos;t that it wrote code — it was how much it behaved like a
-              slightly-too-confident colleague.
+              I did the whole thing with an AI assistant. The part that stayed
+              with me was not that it wrote code. It was how much it acted like
+              a slightly overconfident colleague.
             </P>
             <P>
-              It made a guess about why something was broken, confidently fixed
-              &quot;that,&quot; shipped it, and the bug was still there. It had
-              to stop, admit the guess was wrong, and dig deeper — twice. When
-              it needed the login captcha solved, it showed me the wobbly image
-              and read the letters itself instead of making me type them. When
-              login needed a password it didn&apos;t have, it didn&apos;t crash
-              — it asked me, in the chat, like a person would.
+              It would guess why something was broken, fix that guess, ship it,
+              and the bug would still be there. Then it had to stop and admit
+              the guess was wrong and look again. That happened more than once.
+              When the login needed a captcha solved, it showed me the wobbly
+              image and read the letters itself instead of making me type them.
+              When login needed a password it did not have, it did not fall
+              over. It just asked me in the chat, the way a person would.
             </P>
-            <Callout type="insight">
-              The lesson that stuck: the difference between a tool and a
-              teammate is what happens when something goes wrong. A tool stops.
-              A teammate says &quot;huh, that&apos;s weird&quot; and keeps
-              pulling the thread. The interesting part of this whole project was
-              watching the thread get pulled.
-            </Callout>
+            <P>
+              That is the real difference between a tool and a teammate. A tool
+              stops when it hits something it did not expect. A teammate keeps
+              going and tells you what it is unsure about. Watching it keep
+              going was the interesting part.
+            </P>
           </section>
 
           <section>
-            <SectionHeading>
-              First: what does &quot;publish&quot; even mean?
-            </SectionHeading>
+            <SectionHeading>What publishing even means</SectionHeading>
             <P>
-              When you install a tool with a command like{" "}
+              When you install something with a command like{" "}
               <code className="font-mono text-sm bg-stone-200 px-1.5 py-0.5 rounded">
                 npm i something
               </code>
-              , your computer downloads a little zipped-up parcel from a public
-              warehouse (npm — think of it as an app store for code). That
-              parcel is called a <strong>tarball</strong>.
+              , your computer downloads a small zipped parcel from a public
+              warehouse. That warehouse is npm, basically an app store for
+              code. The parcel is called a tarball.
             </P>
             <P>
-              A tarball is genuinely just that: a folder, squashed into one file
-              so it travels as a single thing — like vacuum-sealing a packed
-              suitcase. When you &quot;publish,&quot; you&apos;re sealing your
-              suitcase and mailing it to the warehouse. When someone installs,
-              they get the suitcase and unpack it. Simple.
+              A tarball is exactly what it sounds like once you ignore the name.
+              It is a folder squashed into one file so it can travel as a single
+              thing, like vacuum sealing a packed bag. Publishing is sealing the
+              bag and mailing it to the warehouse. Installing is someone getting
+              the bag and unpacking it. That is the whole idea.
             </P>
             <P>
-              Except the suitcase remembers more than the clothes inside it. It
-              also remembers little labels on each item. And one specific label
-              is where everything went wrong.
+              The catch is that the bag remembers more than the clothes in it.
+              It also remembers a small label on each item. One of those labels
+              is where everything broke.
             </P>
           </section>
 
           <section>
-            <SectionHeading>
-              The bug: my computer couldn&apos;t ship it
-            </SectionHeading>
+            <SectionHeading>My computer could not ship it</SectionHeading>
             <P>
-              The tool worked perfectly on my machine. I published it. People
-              on Mac and Linux could use it. But anyone on Windows who tried to
-              run it got a blunt error: <em>&quot;not recognized as a
-              command.&quot;</em> The thing simply wouldn&apos;t start for them.
+              The tool worked fine on my machine. I published it. People on Mac
+              and Linux could use it. Anyone on Windows got a flat error saying
+              the command was not recognised. It would not even start for them.
             </P>
             <P>
-              Here&apos;s the part that took embarrassingly long to accept: the
-              code was fine. The problem was a single invisible label on one
-              file inside the suitcase — a label that says{" "}
-              <strong>&quot;this file is allowed to be run as a
-              program&quot;</strong>.
+              The code was fine. The problem was one invisible label on one
+              file inside the bag. The label says whether a file is just data
+              or whether you are allowed to run it as a program.
             </P>
             <P>
-              On Mac and Linux, every file carries a tiny stamp: <em>is this
-              just data, or is it something you&apos;re allowed to execute?</em>{" "}
-              A program needs the &quot;you can run me&quot; stamp. My tool&apos;s
-              main file was going out <em>without</em> that stamp — so when a
-              Windows machine unpacked the suitcase and tried to run it, it
-              found a file that, as far as the label said, wasn&apos;t a program
-              at all.
+              On Mac and Linux every file carries that little flag. A program
+              needs the run me flag set. My tool was going out without it. So a
+              Windows machine would unpack the bag, try to run the file, and
+              find something that, going by the label, was not a program at
+              all.
             </P>
-            <Callout type="warning">
-              The kicker: Windows itself has no concept of that stamp. So when
-              you publish <em>from</em> Windows, your computer literally cannot
-              put the &quot;runnable&quot; label on the file — it doesn&apos;t
-              own a stamp it doesn&apos;t believe in. Every time I published
-              from my laptop, the tool shipped &quot;unstamped&quot; and broke
+            <Note>
+              The annoying part: Windows has no idea this flag exists. So when
+              you publish from Windows, your computer cannot set the run me flag
+              even if you ask. It does not believe in the flag. Every time I
+              published from my laptop the tool went out unflagged and broke
               for everyone else, no matter what I changed in the code.
-            </Callout>
+            </Note>
             <P>
-              Sit with that for a second. The reason I couldn&apos;t ship a
-              working tool had nothing to do with the tool. It was a property of
-              the machine I was mailing it from.
+              That took a while to accept. The reason I could not ship a
+              working tool had nothing to do with the tool. It was a property
+              of the machine I was mailing it from.
             </P>
           </section>
 
           <section>
-            <SectionHeading>The wrong turn (and why it matters)</SectionHeading>
+            <SectionHeading>The wrong turn</SectionHeading>
             <P>
-              Before we found the real cause, we chased a wrong one. The tool
-              had a name, and the command to run it had a name, and they
-              didn&apos;t quite match. That <em>looked</em> like a plausible
-              culprit, so we renamed things, re-shipped, and… still broken.
+              Before we found the real cause we chased a fake one. The tool had
+              a name and the command to run it had a name and they did not
+              quite match. That looked like a believable culprit, so we renamed
+              things, shipped again, and it was still broken.
             </P>
             <P>
-              We&apos;d pattern-matched. We saw something that resembled a known
-              kind of problem and &quot;fixed&quot; it without proving it was
-              the problem. Classic. The actual fix only came from stopping the
-              guessing, installing the published parcel ourselves, and looking
-              at the literal label on the literal file — at which point the
-              missing &quot;runnable&quot; stamp was sitting there in plain
-              sight.
-            </P>
-            <Callout type="insight">
-              The most useful debugging move all week wasn&apos;t clever. It was
-              boring: reproduce it exactly, then read what&apos;s actually there
-              instead of what you assume is there. Every hour we lost was an
-              hour spent fixing a theory instead of checking one.
-            </Callout>
-          </section>
-
-          <section>
-            <SectionHeading>The fix: let a robot in a clean room mail it</SectionHeading>
-            <P>
-              If my Windows laptop can&apos;t apply the &quot;runnable&quot;
-              stamp, the answer is to not mail the suitcase from my laptop at
-              all. Instead, every time I want to release, a fresh Linux computer
-              spins up in the cloud, builds the tool, applies the stamp
-              properly, double-checks it starts, and mails it. Then it
-              evaporates.
+              We had pattern matched. We saw something that looked like a known
+              kind of problem and fixed it without checking it was the problem.
+              The real fix only showed up when we stopped guessing, installed
+              the published parcel ourselves, and looked at the actual label on
+              the actual file. The missing flag was sitting right there.
             </P>
             <P>
-              This is what people mean by &quot;CI&quot; — it&apos;s just a
-              robot in a clean room that does the release the same careful way
-              every single time, so a human&apos;s messy laptop is never in the
-              loop. I push a version tag; the robot does the rest.
-            </P>
-            <P>
-              There was a bonus problem here too: how does the warehouse know
-              the robot is <em>me</em> and not an impostor? The old answer was a
-              password-like token you paste into the robot. The modern answer,
-              which we used, is closer to a trusted handshake: the warehouse and
-              the robot&apos;s home (the code host) vouch for each other
-              directly, so there&apos;s no secret to leak or expire. No
-              password sitting in a settings file.
+              The most useful thing I did all week was boring. Reproduce the
+              failure exactly, then look at what is really there instead of
+              what I assumed was there. Every hour I lost was an hour spent
+              fixing a theory I never bothered to check.
             </P>
           </section>
 
           <section>
-            <SectionHeading>The receipt nobody can fake</SectionHeading>
+            <SectionHeading>Letting a clean machine mail it</SectionHeading>
             <P>
-              One more thing the robot does: it attaches a tamper-proof
-              receipt. It says, publicly and cryptographically, &quot;this exact
-              parcel was built from this exact code by this exact robot.&quot;
-              That&apos;s called <strong>provenance</strong>. If someone ever
-              hijacked my account and shipped a poisoned version, it
-              couldn&apos;t produce a matching receipt — the lie wouldn&apos;t
-              check out.
+              If my Windows laptop cannot set the run me flag, the answer is to
+              not mail the bag from my laptop. Instead, every time I want to
+              release, a fresh Linux machine starts up in the cloud, builds the
+              tool, sets the flag properly, checks that it starts, and mails it.
+              Then it shuts down.
             </P>
             <P>
-              The catch: that public receipt only works if the code is public
-              too. So I made the repository public — which sounds scary until
-              you realise the built tool was already downloadable by anyone the
-              moment it was published. The source being open just lets people
-              verify it instead of trusting me. (Worth a sanity check first:
-              we scanned every branch of history to be sure no password ever
-              got committed. It hadn&apos;t.)
-            </P>
-            <Callout type="info">
-              &quot;Public repo&quot; also doesn&apos;t mean anyone can change
-              your code. Read access and write access are different doors.
-              Strangers can read and suggest; only you can merge and release.
-            </Callout>
-          </section>
-
-          <section>
-            <SectionHeading>The small human touches</SectionHeading>
-            <P>
-              After the shipping mechanics were solved, the remaining work was
-              all about how it <em>feels</em> to use. When the tool didn&apos;t
-              have your login saved, an early version dumped a wall of
-              &quot;Option A, Option B, here&apos;s how to configure environment
-              variables, also which campus are you&quot; — technically correct,
-              completely exhausting.
+              That is all CI really is. A clean machine that does the release
+              the same careful way every time, so a messy laptop is never part
+              of it. I push a version tag and the machine does the rest.
             </P>
             <P>
-              The fix wasn&apos;t code. It was tone. We told the assistant, in
-              effect: just ask one short human question — &quot;what&apos;s your
-              username and password?&quot; — and nothing else. Don&apos;t
-              lecture. The tool got friendlier without getting smarter, and that
-              was the right trade.
+              There was a smaller question hiding here. How does the warehouse
+              know the machine is me and not someone pretending to be me. The
+              old way was a long password you paste into the machine. The newer
+              way, which I used, is more like a trusted handshake. The warehouse
+              and the place the code lives vouch for each other directly, so
+              there is no secret to leak or to forget to renew.
             </P>
           </section>
 
           <section>
-            <SectionHeading>What I&apos;d tell past-me</SectionHeading>
+            <SectionHeading>A receipt nobody can fake</SectionHeading>
+            <P>
+              The machine also attaches a receipt. It states, publicly and with
+              cryptography, that this exact parcel was built from this exact
+              code by this exact machine. The name for that is provenance. If
+              someone ever took over my account and shipped a poisoned version,
+              they could not produce a matching receipt.
+            </P>
+            <P>
+              The receipt only works if the code is public too, so I made the
+              repository public. That sounds risky until you remember the built
+              tool was already downloadable by anyone the moment it was
+              published. Open source just lets people check it instead of
+              trusting me. We did scan the whole history first to be sure no
+              password was ever committed. It was clean.
+            </P>
+            <Note>
+              Public also does not mean strangers can change your code. Reading
+              and writing are different doors. Anyone can read it and suggest
+              changes. Only I can merge and release.
+            </Note>
+          </section>
+
+          <section>
+            <SectionHeading>The small human stuff</SectionHeading>
+            <P>
+              Once the shipping was solved, the rest of the work was about how
+              it feels to use. When the tool did not have your login saved, an
+              early version replied with a wall of options, a guide to setting
+              environment variables, and a question about which campus you were
+              at. All correct. Completely tiring to read.
+            </P>
+            <P>
+              The fix was not code. It was tone. We told the assistant to ask
+              one short question, what is your username and password, and stop
+              there. The tool got friendlier without getting any smarter, and
+              that was the right trade.
+            </P>
+          </section>
+
+          <section>
+            <SectionHeading>What I would tell myself before starting</SectionHeading>
             <div className="my-6 space-y-4">
               <div className="border-l-4 border-amber-300 pl-5 py-2">
                 <h4 className="font-bold text-stone-900 text-sm mb-1">
                   The code is rarely the hard part
                 </h4>
                 <p className="text-stone-600 text-sm leading-relaxed">
-                  Building the thing took an afternoon. Shipping it correctly,
-                  for everyone, took days. Packaging, permissions, and
-                  distribution are real engineering, not an afterthought.
+                  Building the thing took an afternoon. Shipping it correctly
+                  for everyone took days. Packaging and distribution are real
+                  work, not an afterthought.
                 </p>
               </div>
               <div className="border-l-4 border-blue-300 pl-5 py-2">
@@ -337,19 +299,18 @@ export default function ShippingAnNpmPackage() {
                   Reproduce before you theorise
                 </h4>
                 <p className="text-stone-600 text-sm leading-relaxed">
-                  We burned the most time fixing confident guesses. The
-                  unglamorous loop — reproduce exactly, read what&apos;s really
-                  there — is what actually closed the bug.
+                  Most of the time was lost fixing confident guesses. The dull
+                  loop of reproduce, then look, is what actually closed it.
                 </p>
               </div>
               <div className="border-l-4 border-emerald-300 pl-5 py-2">
                 <h4 className="font-bold text-stone-900 text-sm mb-1">
-                  Take the human out of the release
+                  Take yourself out of the release
                 </h4>
                 <p className="text-stone-600 text-sm leading-relaxed">
-                  &quot;Works on my machine&quot; is a warning, not a milestone.
-                  A clean automated release removes a whole category of bugs
-                  that come from the machine, not the code.
+                  Works on my machine is a warning, not a win. A clean
+                  automated release removes a whole class of bugs that come
+                  from the machine and not the code.
                 </p>
               </div>
               <div className="border-l-4 border-violet-300 pl-5 py-2">
@@ -357,10 +318,9 @@ export default function ShippingAnNpmPackage() {
                   Working with AI is managing a teammate
                 </h4>
                 <p className="text-stone-600 text-sm leading-relaxed">
-                  It moves fast and is sometimes confidently wrong — same as
-                  any of us. The value isn&apos;t blind trust; it&apos;s a
-                  partner that keeps pulling the thread while you keep it
-                  honest.
+                  It is fast and sometimes confidently wrong, same as anyone.
+                  The value is not blind trust. It is a partner that keeps
+                  pulling the thread while you keep it honest.
                 </p>
               </div>
             </div>
@@ -369,21 +329,21 @@ export default function ShippingAnNpmPackage() {
           <section>
             <div className="my-12 p-8 bg-stone-900 rounded-2xl text-center">
               <p className="text-2xl md:text-3xl font-bold text-white tracking-tight leading-snug mb-4">
-                The tool was 400 lines.
+                The tool was a few hundred lines.
                 <br />
                 <span className="text-amber-400">
-                  The lesson was everything around it.
+                  Everything around it was the lesson.
                 </span>
               </p>
               <p className="text-stone-400 text-sm max-w-md mx-auto">
-                You can try the actual thing —{" "}
+                You can try the actual thing,{" "}
                 <a
                   href="https://www.vikranth.space/labs/vtop-mcp"
                   className="text-amber-400 underline"
                 >
                   vtop-mcp
-                </a>{" "}
-                — or read the code. The bug is fixed. The story is the point.
+                </a>
+                , or read the code. The bug is fixed. The story was the point.
               </p>
             </div>
           </section>

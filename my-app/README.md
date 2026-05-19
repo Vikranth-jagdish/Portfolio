@@ -1,7 +1,7 @@
-# Vikranth Jagdish — Portfolio
+# Vikranth Jagdish Portfolio
 
-The source for [www.vikranth.space](https://www.vikranth.space) — a personal
-site built around a "now playing" / music-player metaphor: projects, labs,
+The source for [www.vikranth.space](https://www.vikranth.space). A personal
+site built around a "now playing" music-player metaphor: projects, labs,
 experience, photos and writing are browsed like tracks in a record crate.
 
 ## Stack
@@ -22,7 +22,7 @@ my-app/
 │   ├── labs/vtop-mcp/         # standalone product page for the vtop-mcp npm pkg
 │   ├── blogs/<slug>/          # one folder per post (page.tsx + layout.tsx meta)
 │   ├── api/                   # blogs, github-stats, spotify now-playing/top-tracks
-│   ├── sitemap.ts robots.ts   # SEO — generated /sitemap.xml and /robots.txt
+│   ├── sitemap.ts robots.ts   # SEO, generates /sitemap.xml and /robots.txt
 │   └── globals.css            # theme tokens
 ├── components/                # UI (music-portfolio, blogs-list, shaders, …)
 └── lib/                       # data.ts (content), spotify/github helpers
@@ -46,11 +46,11 @@ Add a project/lab by editing `lib/data.ts`. Add a blog by creating
 
 ## Notable
 
-- **`/labs/vtop-mcp`** — a full landing page for
+- **`/labs/vtop-mcp`**: a full landing page for
   [`@vikranth2005/vtop-mcp`](https://www.npmjs.com/package/@vikranth2005/vtop-mcp),
   an MCP server I built and published. One-click "Add to Cursor / VS Code"
-  deeplinks, copy-paste configs, and its own SEO metadata + JSON-LD.
-- **`/blogs`** — long-form writing, including a plain-English account of
+  deeplinks, copy-paste configs, and its own SEO metadata plus JSON-LD.
+- **`/blogs`**: long-form writing, including a plain-English account of
   everything that went into shipping that npm package.
 
 Deployed on Vercel.

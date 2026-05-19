@@ -28,7 +28,7 @@ const SERVER_CONFIG = {
 
 const TOOLS: { name: string; desc: string }[] = [
   { name: "get_captcha", desc: "Fetch the login captcha image (the model OCRs it)" },
-  { name: "login", desc: "Authenticate — uses env creds or asks you in chat" },
+  { name: "login", desc: "Authenticate. Uses env creds or asks you in chat" },
   { name: "logout", desc: "End the VTOP session" },
   { name: "get_semesters", desc: "List every available semester" },
   { name: "get_profile", desc: "Name, reg no, branch, school, contact" },
@@ -161,8 +161,8 @@ export default function VtopMcpPage() {
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
             A programmatic <span className="text-white/80">VTOP API</span> for{" "}
             <span className="text-white/80">VIT Chennai</span>, packaged as a
-            Model Context Protocol (MCP) server. Ask any AI client — Claude,
-            Cursor, VS Code — about your attendance, marks, timetable, exam
+            Model Context Protocol (MCP) server. Ask any AI client (Claude,
+            Cursor, VS Code) about your attendance, marks, timetable, exam
             seats, CGPA or curriculum progress in plain language, or script
             VTOP access yourself.
           </p>
@@ -310,8 +310,8 @@ export default function VtopMcpPage() {
             tools
           </h2>
           <p className="mb-5 text-xs text-white/40">
-            Scrapes like a browser — cookies, CSRF, captcha. Nothing is written
-            back to VTOP.
+            Scrapes like a browser using cookies, CSRF and captcha. Nothing is
+            written back to VTOP.
           </p>
           <div className="grid gap-px overflow-hidden rounded-xl border border-white/10 bg-white/10 sm:grid-cols-2">
             {TOOLS.map((t) => (
@@ -340,9 +340,9 @@ export default function VtopMcpPage() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 border-t border-white/10 pt-6 text-[11px] text-white/30"
         >
-          An open-source VTOP API / MCP server for VIT Chennai — VTOP
+          An open-source VTOP API / MCP server for VIT Chennai. VTOP
           attendance, marks, timetable, exam schedule, CGPA and curriculum
-          progress, scriptable or via Claude / Cursor / VS Code. Built by
+          progress, scriptable or via Claude, Cursor or VS Code. Built by
           reverse-engineering the android-vtop-chennai app. Not affiliated with
           VIT. MIT licensed · credentials stay on your machine.
         </motion.footer>

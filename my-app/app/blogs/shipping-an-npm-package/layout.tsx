@@ -3,10 +3,9 @@ import type { Metadata } from "next";
 const SITE = "https://www.vikranth.space";
 const PAGE_URL = `${SITE}/blogs/shipping-an-npm-package`;
 
-const TITLE =
-  "I shipped a tiny tool — it taught me more than the code";
+const TITLE = "Shipping a tiny tool was harder than building it";
 const DESCRIPTION =
-  "A jargon-free story of building and publishing an npm package with an AI: what a tarball is, why Windows physically couldn't ship it, the executable-bit bug, automated releases, and what working alongside an AI actually feels like.";
+  "A plain-words story of building and publishing an npm package with an AI. What a tarball is, why Windows physically could not ship it, the bug that had nothing to do with the code, automated releases, and what working with an AI actually feels like.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),

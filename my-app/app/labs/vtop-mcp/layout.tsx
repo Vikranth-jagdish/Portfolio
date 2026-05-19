@@ -4,9 +4,9 @@ const SITE = "https://www.vikranth.space";
 const PAGE_URL = `${SITE}/labs/vtop-mcp`;
 
 const TITLE =
-  "VTOP API / MCP Server for VIT Chennai — attendance, marks, timetable | @vikranth2005/vtop-mcp";
+  "VTOP API / MCP Server for VIT Chennai: attendance, marks, timetable | @vikranth2005/vtop-mcp";
 const DESCRIPTION =
-  "Programmatic access to VIT Chennai's VTOP — a VTOP API exposed as an MCP server. Get attendance, marks, timetable, exam seats, CGPA and curriculum progress from Claude, Cursor or VS Code, or script it yourself. Free, open source. npm i @vikranth2005/vtop-mcp.";
+  "Programmatic access to VIT Chennai's VTOP, a VTOP API exposed as an MCP server. Get attendance, marks, timetable, exam seats, CGPA and curriculum progress from Claude, Cursor or VS Code, or script it yourself. Free and open source. npm i @vikranth2005/vtop-mcp.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "VTOP MCP — VIT Chennai VTOP for Claude / Cursor / VS Code",
+    title: "VTOP MCP for VIT Chennai: Claude, Cursor, VS Code",
     description: DESCRIPTION,
     creator: "@vikranth_j",
   },

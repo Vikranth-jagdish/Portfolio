@@ -7,8 +7,8 @@ export async function GET() {
     const dedicatedBlogs = [
       {
         slug: 'shipping-an-npm-package',
-        title: 'I Shipped a Tiny Tool — It Taught Me More Than the Code',
-        preview: 'A jargon-free story of publishing an npm package with an AI: what a tarball is, why Windows physically couldn\'t ship it, the bug that had nothing to do with the code, and what working alongside an AI actually feels like...',
+        title: 'Shipping a Tiny Tool Was Harder Than Building It',
+        preview: 'A plain-words story of publishing an npm package with an AI. What a tarball is, why Windows physically could not ship it, the bug that had nothing to do with the code, and what working with an AI actually feels like.',
         createdAt: new Date('2026-05-19'),
         modifiedAt: new Date('2026-05-19'),
       },
