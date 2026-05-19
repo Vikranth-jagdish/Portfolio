@@ -66,9 +66,13 @@ export default function CategoryPageWrapper({ category }: CategoryPageProps) {
             router.push("/");
             return;
         }
-        // Handle other clicks if necessary (external links?)
+        // Internal route → client-side navigation; external → new tab.
         if (item.link) {
-            window.open(item.link, '_blank');
+            if (item.link.startsWith("/")) {
+                router.push(item.link);
+            } else {
+                window.open(item.link, '_blank');
+            }
         }
     };
 
