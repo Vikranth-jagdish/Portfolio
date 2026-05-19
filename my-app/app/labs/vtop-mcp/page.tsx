@@ -159,10 +159,12 @@ export default function VtopMcpPage() {
             vtop<span style={{ color: ACCENT }}>-mcp</span>
           </h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
-            A Model Context Protocol server for VIT&apos;s VTOP portal. Ask any
-            AI client — Claude, Cursor, VS Code — about your attendance, marks,
-            timetable, exam seats, CGPA or curriculum progress, in plain
-            language.
+            A programmatic <span className="text-white/80">VTOP API</span> for{" "}
+            <span className="text-white/80">VIT Chennai</span>, packaged as a
+            Model Context Protocol (MCP) server. Ask any AI client — Claude,
+            Cursor, VS Code — about your attendance, marks, timetable, exam
+            seats, CGPA or curriculum progress in plain language, or script
+            VTOP access yourself.
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -190,6 +192,7 @@ export default function VtopMcpPage() {
             >
               <ExternalLink size={14} /> npm
             </a>
+            <span className="text-xs text-white/30">· VIT Chennai only</span>
           </div>
         </motion.header>
 
@@ -337,8 +340,11 @@ export default function VtopMcpPage() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 border-t border-white/10 pt-6 text-[11px] text-white/30"
         >
-          Built by reverse-engineering the android-vtop-chennai app. Not
-          affiliated with VIT. MIT licensed · credentials stay on your machine.
+          An open-source VTOP API / MCP server for VIT Chennai — VTOP
+          attendance, marks, timetable, exam schedule, CGPA and curriculum
+          progress, scriptable or via Claude / Cursor / VS Code. Built by
+          reverse-engineering the android-vtop-chennai app. Not affiliated with
+          VIT. MIT licensed · credentials stay on your machine.
         </motion.footer>
       </div>
     </div>
