@@ -76,4 +76,4 @@ npm run build    # production build
 - Site: [www.vikranth.space](https://www.vikranth.space)
 - Package: [npmjs.com/package/@vikranth2005/vtop-mcp](https://www.npmjs.com/package/@vikranth2005/vtop-mcp)
 - LinkedIn: [vikranth-jagdish](https://www.linkedin.com/in/vikranth-jagdish-b37798126/)
-- X: [@vikranth_j](https://x.com/vikranth_j)
+- X: [@TurtlePlays343](https://x.com/TurtlePlays343)

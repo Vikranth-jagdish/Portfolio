@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "VTOP MCP for VIT Chennai: Claude, Cursor, VS Code",
     description: DESCRIPTION,
-    creator: "@vikranth_j",
+    creator: "@TurtlePlays343",
   },
 };
 

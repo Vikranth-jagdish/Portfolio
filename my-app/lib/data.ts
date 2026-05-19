@@ -269,7 +269,7 @@ export const GLOBAL_SOCIAL_LINKS = {
     linkedin: "https://www.linkedin.com/in/vikranth-jagdish-b37798126/",
     instagram: "https://www.instagram.com/vikranth_jagdish/",
     email: "mailto:vicky@botcode.com",
-    x: "https://x.com/vikranth_j"
+    x: "https://x.com/TurtlePlays343"
 };
 
 export const GLOBAL_LOCATION = {
