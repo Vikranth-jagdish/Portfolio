@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-const SITE = "https://vikranth.space";
+const SITE = "https://www.vikranth.space";
 const PAGE_URL = `${SITE}/labs/vtop-mcp`;
 
 const TITLE =
