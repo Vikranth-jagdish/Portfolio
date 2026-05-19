@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/labs/vtop-mcp",
     "/experience",
     "/blogs",
+    "/blogs/shipping-an-npm-package",
     "/blogs/agentic-graph-rag",
     "/blogs/how-ai-actually-works",
     "/blogs/livekit-voice",

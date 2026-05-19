@@ -6,6 +6,13 @@ export async function GET() {
   try {
     const dedicatedBlogs = [
       {
+        slug: 'shipping-an-npm-package',
+        title: 'I Shipped a Tiny Tool — It Taught Me More Than the Code',
+        preview: 'A jargon-free story of publishing an npm package with an AI: what a tarball is, why Windows physically couldn\'t ship it, the bug that had nothing to do with the code, and what working alongside an AI actually feels like...',
+        createdAt: new Date('2026-05-19'),
+        modifiedAt: new Date('2026-05-19'),
+      },
+      {
         slug: 'how-ai-actually-works',
         title: 'How AI Actually Works: Why It Has No Memory',
         preview: 'An interactive exploration of how LLMs are stateless black boxes, and how context passing creates the illusion of memory...',
