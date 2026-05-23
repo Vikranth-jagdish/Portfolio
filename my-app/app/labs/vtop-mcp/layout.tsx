@@ -4,9 +4,9 @@ const SITE = "https://www.vikranth.space";
 const PAGE_URL = `${SITE}/labs/vtop-mcp`;
 
 const TITLE =
-  "VTOP API / MCP Server for VIT Chennai: attendance, marks, timetable | @vikranth2005/vtop-mcp";
+  "VTOP in ChatGPT — VTOP API / MCP Server for VIT Chennai: attendance, marks, timetable | @vikranth2005/vtop-mcp";
 const DESCRIPTION =
-  "Programmatic access to VIT Chennai's VTOP, a VTOP API exposed as an MCP server. Get attendance, marks, timetable, exam seats, CGPA and curriculum progress from Claude, Cursor or VS Code, or script it yourself. Free and open source. npm i @vikranth2005/vtop-mcp.";
+  "Connect VIT Chennai's VTOP to ChatGPT, Claude, Cursor or VS Code. A VTOP API exposed as an MCP server — now also a hosted ChatGPT connector. Get attendance, marks, timetable, exam seats, CGPA and curriculum progress in plain English, or script it yourself. Free and open source. npm i @vikranth2005/vtop-mcp.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
@@ -22,6 +22,15 @@ export const metadata: Metadata = {
     "mcp server vit",
     "vtop mcp claude",
     "vtop mcp cursor",
+    // ChatGPT connector
+    "vtop chatgpt",
+    "vtop in chatgpt",
+    "vtop chatgpt connector",
+    "vit chatgpt",
+    "vit vtop chatgpt",
+    "chatgpt connector vit",
+    "chatgpt mcp connector",
+    "vtop attendance chatgpt",
     // broader VTOP intent
     "vtop api",
     "vtop server",
@@ -65,7 +74,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "VTOP MCP for VIT Chennai: Claude, Cursor, VS Code",
+    title: "VTOP in ChatGPT — VTOP MCP for VIT Chennai (Claude, Cursor, VS Code)",
     description: DESCRIPTION,
     creator: "@TurtlePlays343",
   },
@@ -80,11 +89,12 @@ const jsonLd = {
   alternateName: [
     "VTOP API",
     "VTOP MCP Server",
+    "VTOP ChatGPT Connector",
     "VIT Chennai VTOP API",
     "vtop-mcp",
   ],
   applicationCategory: "DeveloperApplication",
-  operatingSystem: "Windows, macOS, Linux",
+  operatingSystem: "Windows, macOS, Linux, Web",
   description: DESCRIPTION,
   url: PAGE_URL,
   downloadUrl: "https://www.npmjs.com/package/@vikranth2005/vtop-mcp",
@@ -95,7 +105,7 @@ const jsonLd = {
   author: { "@type": "Person", name: "Vikranth Jagdish", url: SITE },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   keywords:
-    "vtop api, vtop mcp, vtop server, vtop attendance, vtop automation, vit chennai, model context protocol, claude, cursor",
+    "vtop api, vtop mcp, vtop chatgpt, vtop chatgpt connector, vtop server, vtop attendance, vtop automation, vit chennai, model context protocol, chatgpt, claude, cursor",
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

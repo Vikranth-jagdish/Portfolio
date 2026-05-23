@@ -223,9 +223,9 @@ export const LABS_DATA = [
     {
         id: "vtop-mcp",
         artist: "VTOP-MCP",
-        album: "NPM PACKAGE",
+        album: "CHATGPT CONNECTOR",
         category: "MCP SERVER",
-        label: "PUBLISHED",
+        label: "NOW IN CHATGPT",
         year: "2026",
         image: "https://images.unsplash.com/photo-1629654297299-c8506221ca97?q=80&w=2564&auto=format&fit=crop",
         link: "/labs/vtop-mcp"

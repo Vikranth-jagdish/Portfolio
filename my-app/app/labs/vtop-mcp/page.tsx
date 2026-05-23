@@ -12,12 +12,19 @@ import {
   ExternalLink,
   ShieldCheck,
   Boxes,
+  Bot,
+  Sparkles,
+  MessageSquare,
 } from "lucide-react";
 
 const ACCENT = "rgb(255, 223, 0)";
 const PKG = "@vikranth2005/vtop-mcp";
 const REPO = "https://github.com/Vikranth-jagdish/VtopMCP";
 const NPM_URL = "https://www.npmjs.com/package/@vikranth2005/vtop-mcp";
+
+/** Live remote connector (multi-user mode) for the ChatGPT integration. */
+const CONNECTOR_HOST = "https://vtopmcp.onrender.com";
+const CHATGPT_REGISTER = `${CONNECTOR_HOST}/register`;
 
 /** Inner MCP server config shared by every client. */
 const SERVER_CONFIG = {
@@ -150,6 +157,12 @@ export default function VtopMcpPage() {
             <span className="rounded-full border border-white/10 px-2 py-1">
               MCP Server
             </span>
+            <span
+              className="inline-flex items-center gap-1 rounded-full border px-2 py-1"
+              style={{ borderColor: "rgba(255,223,0,0.4)", color: ACCENT }}
+            >
+              <Sparkles size={11} /> Now in ChatGPT
+            </span>
           </div>
 
           <h1
@@ -161,10 +174,11 @@ export default function VtopMcpPage() {
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
             A programmatic <span className="text-white/80">VTOP API</span> for{" "}
             <span className="text-white/80">VIT Chennai</span>, packaged as a
-            Model Context Protocol (MCP) server. Ask any AI client (Claude,
-            Cursor, VS Code) about your attendance, marks, timetable, exam
-            seats, CGPA or curriculum progress in plain language, or script
-            VTOP access yourself.
+            Model Context Protocol (MCP) server. Ask any AI client — now
+            including <span className="text-white/80">ChatGPT</span>, plus
+            Claude, Cursor and VS Code — about your attendance, marks,
+            timetable, exam seats, CGPA or curriculum progress in plain
+            language, or script VTOP access yourself.
           </p>
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -195,6 +209,111 @@ export default function VtopMcpPage() {
             <span className="text-xs text-white/30">· VIT Chennai only</span>
           </div>
         </motion.header>
+
+        {/* ChatGPT connector — headline feature */}
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.06, ease: "easeOut" }}
+          className="mt-10"
+        >
+          <div
+            className="relative overflow-hidden rounded-2xl border p-6 md:p-8"
+            style={{
+              borderColor: "rgba(255,223,0,0.35)",
+              background:
+                "radial-gradient(120% 120% at 0% 0%, rgba(255,223,0,0.10), rgba(255,223,0,0) 55%)",
+            }}
+          >
+            <div className="mb-3 flex items-center gap-2">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black"
+                style={{ background: ACCENT }}
+              >
+                <Sparkles size={12} /> New
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-white/40">
+                Remote MCP · Streamable HTTP
+              </span>
+            </div>
+
+            <h2 className="flex items-center gap-2 text-2xl font-bold md:text-3xl">
+              <Bot size={24} style={{ color: ACCENT }} /> VTOP is now in ChatGPT
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/60 md:text-base">
+              Beyond the local clients, vtop-mcp now runs as a hosted{" "}
+              <span className="text-white/80">remote connector</span>. Link your
+              VTOP account once and ask ChatGPT{" "}
+              <span className="italic text-white/80">
+                &ldquo;what&apos;s my attendance?&rdquo;
+              </span>{" "}
+              — your credentials are encrypted into a personal link and never
+              stored on the server.
+            </p>
+
+            <ol className="mt-6 grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  n: "1",
+                  t: "Register",
+                  d: "Open the connector page and enter your VTOP login. You get a personal, encrypted link.",
+                },
+                {
+                  n: "2",
+                  t: "Add to ChatGPT",
+                  d: "Settings → Connectors → Create. Paste your link, set authentication to None.",
+                },
+                {
+                  n: "3",
+                  t: "Ask anything",
+                  d: "Enable the connector in a chat and ask about attendance, marks, CGPA or exams.",
+                },
+              ].map((s) => (
+                <li
+                  key={s.n}
+                  className="rounded-xl border border-white/10 bg-black/30 p-4"
+                >
+                  <div
+                    className="mb-2 flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-black"
+                    style={{ background: ACCENT }}
+                  >
+                    {s.n}
+                  </div>
+                  <h3 className="text-sm font-bold text-white">{s.t}</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-white/50">
+                    {s.d}
+                  </p>
+                </li>
+              ))}
+            </ol>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a
+                href={CHATGPT_REGISTER}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-black transition-transform hover:scale-[1.02]"
+                style={{ background: ACCENT }}
+              >
+                <MessageSquare size={15} /> Connect VTOP to ChatGPT
+                <ExternalLink size={14} />
+              </a>
+              <a
+                href={CONNECTOR_HOST}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-xs text-white/50 transition-colors hover:text-white"
+              >
+                <ExternalLink size={14} /> vtopmcp.onrender.com
+              </a>
+            </div>
+
+            <p className="mt-4 text-[11px] leading-relaxed text-white/35">
+              Prefer Claude, Cursor or VS Code? They run the same 12 tools
+              locally over stdio — see the one-click options below.
+            </p>
+          </div>
+        </motion.section>
 
         {/* Install command */}
         <motion.section
@@ -342,9 +461,9 @@ export default function VtopMcpPage() {
         >
           An open-source VTOP API / MCP server for VIT Chennai. VTOP
           attendance, marks, timetable, exam schedule, CGPA and curriculum
-          progress, scriptable or via Claude, Cursor or VS Code. Built by
-          reverse-engineering the android-vtop-chennai app. Not affiliated with
-          VIT. MIT licensed · credentials stay on your machine.
+          progress, scriptable or via ChatGPT, Claude, Cursor or VS Code. Built
+          by reverse-engineering the android-vtop-chennai app. Not affiliated
+          with VIT. MIT licensed · credentials stay on your machine.
         </motion.footer>
       </div>
     </div>
