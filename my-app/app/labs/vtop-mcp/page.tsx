@@ -217,18 +217,6 @@ export default function VtopMcpPage() {
           transition={{ duration: 0.5, delay: 0.06, ease: "easeOut" }}
           className="mt-10"
         >
-          <div className="mb-3 flex items-center gap-2">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black"
-              style={{ background: ACCENT }}
-            >
-              <Sparkles size={12} /> New
-            </span>
-            <span className="text-[10px] uppercase tracking-[0.2em] text-white/40">
-              Remote MCP · Streamable HTTP
-            </span>
-          </div>
-
           <h2 className="flex items-center gap-2 text-2xl font-bold md:text-3xl">
             <Bot size={24} style={{ color: ACCENT }} /> Use VTOP directly from
             ChatGPT
